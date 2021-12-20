@@ -13,7 +13,7 @@ from ..managers import NotDeleted, ActiveManager
 from .icons import ICONS
 
 # Other models Import:
-from .credential import Credential
+from .credential_model import Credential
 
 
 # Model code:
@@ -67,14 +67,14 @@ class Device(models.Model):
     )
     hostname = models.CharField(
         verbose_name='IP / DNS name',
-        max_length=64,
+        max_length=32,
         blank=False,
         unique=True,
         validators=[hostname_validator],
         error_messages={
             'null': 'IP / DNS name field is mandatory.',
             'blank': 'IP / DNS name field is mandatory.',
-            'invalid': 'Enter a valid IP address or DNS resolvable hostname. It must contain 8 to 32 digits, letters and special characters -, _, . or spaces.',
+            'invalid': 'Enter a valid IP address or DNS resolvable hostname. It must contain 4 to 32 digits, letters and special characters -, _, . or spaces.',
         },
     )
     device_type = models.IntegerField(
@@ -96,8 +96,8 @@ class Device(models.Model):
         default=443
     )
     description = models.CharField(
-        verbose_name='Credentials description',
-        max_length=256, default='Credentials description.',
+        verbose_name='Device description',
+        max_length=256, default='Device description.',
         validators=[description_validator],
         error_messages={
             'invalid': 'Enter the correct description value. It must contain 8 to 16 digits, letters and special characters -, _, . or spaces.',
@@ -130,19 +130,19 @@ class Device(models.Model):
         return f"{self.pk}: {self.name}"
 
     # Override default Delete method:
-    def delete(self):
-        """
-            Override the default Delete method to see if the device was created by the Root user,
-            if true don't change anything, otherwise change deleted value to true.
-        """
-        # Check if root value is True:
-        if self.root == True:
-            # Inform the user that the object cannot be deleted because is a root object:
-            assert self.pk is not None, (
-                f"{self._meta.object_name} object can't be deleted because its a root object.")
-        else:
-            # Change deleted value to True, to inform that object is deleted:
-            self.deleted = True
+    # def delete(self):
+    #     """
+    #         Override the default Delete method to see if the device was created by the Root user,
+    #         if true don't change anything, otherwise change deleted value to true.
+    #     """
+    #     # Check if root value is True:
+    #     if self.root == True:
+    #         # Inform the user that the object cannot be deleted because is a root object:
+    #         assert self.pk is not None, (
+    #             f"{self._meta.object_name} object can't be deleted because its a root object.")
+    #     else:
+    #         # Change deleted value to True, to inform that object is deleted:
+    #         self.deleted = True
 
 
     # Meta sub class:

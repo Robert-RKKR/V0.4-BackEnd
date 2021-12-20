@@ -2,10 +2,10 @@
 from django.contrib import admin
 
 # Application Import:
-from .models.color import *
-from .models.group import *
-from .models.credential import *
-from .models.device import *
+from .models.color_model import *
+from .models.group_model import *
+from .models.credential_model import *
+from .models.device_model import *
 
 # Register Application models in Django Admin:
 admin.site.register(Color)

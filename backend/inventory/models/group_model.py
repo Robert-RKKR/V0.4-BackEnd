@@ -1,32 +1,22 @@
 # Django Import:
 from django.db import models
 
-# Other models Import:
-from .credential import Credential
-from .device import Device
-from .group import Group
-
 # Validators Import:
 from ..validators import (
     NameValueValidator,
-    DescriptionValueValidator,
-    ColorValueValidator
+    DescriptionValueValidator
 )
 
-# Applications Import:
-from ..managers import NotDeleted
+# Other models Import:
+from .device_model import Device
+
 
 # Model code:
-class Color(models.Model):
-    """ 
-        The Color model is working like Tag,
-        available to be added to all device,
-        group and credential models.
-    """
+class Group(models.Model):
+    """ Groups allow you to group network devices. """
 
     # Validators:
     name_validator = NameValueValidator()
-    color_validator = ColorValueValidator()
     description_validator = DescriptionValueValidator()
 
     # Creation data values:
@@ -40,7 +30,7 @@ class Color(models.Model):
 
     # Main model values:
     name = models.CharField(
-        verbose_name='Color name',
+        verbose_name='Group name',
         max_length=16,
         blank=False,
         unique=True,
@@ -49,17 +39,6 @@ class Color(models.Model):
             'null': 'Name field is mandatory.',
             'blank': 'Name field is mandatory.',
             'invalid': 'Enter the correct name value. It must contain 8 to 16 digits, letters and special characters -, _ or spaces.',
-        },
-    )
-    hexadecimal = models.CharField(
-        verbose_name='Color hexadecimal value',
-        unique=True,
-        max_length=7,
-        validators=[color_validator],
-        error_messages={
-            'null': 'Colour field is mandatory.',
-            'blank': 'Colour field is mandatory.',
-            'invalid': 'Enter the correct colour value. It must be a 3/6 hexadecimal number with # character on begining.',
         },
     )
     description = models.CharField(
@@ -72,9 +51,7 @@ class Color(models.Model):
     )
 
     # Relationships with other models:
-    devices = models.ManyToManyField(Device, through='ColorDeviceRelation', null=True, blank=True)
-    groups = models.ManyToManyField(Group, through='ColorGroupRelation', null=True, blank=True)
-    credentials = models.ManyToManyField(Credential, through='ColorCredentialRelation', null=True, blank=True)
+    devices = models.ManyToManyField(Device, through='GroupDeviceRelation')
 
     # Model representation:
     def __str__(self) -> str:
@@ -95,18 +72,15 @@ class Color(models.Model):
             # Change deleted value to True, to inform that object is deleted:
             self.deleted = True
 
-    # Object managers:
-    objects = NotDeleted()
-
     # Meta sub class:
     class Meta:
         app_label = 'inventory'
-        verbose_name = 'Color'
-        verbose_name_plural = 'Colors'
+        verbose_name = 'Group'
+        verbose_name_plural = 'Groups'
 
 
 # Relations models:
-class ColorDeviceRelation(models.Model):
+class GroupDeviceRelation(models.Model):
 
     # Creation values:
     created = models.DateTimeField(auto_now_add=True)
@@ -117,53 +91,11 @@ class ColorDeviceRelation(models.Model):
 
     # Relations values:
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    color = models.ForeignKey(Color, on_delete=models.CASCADE)
-
-    # Model representation:
-    def __str__(self) -> str:
-        return f"ColorDeviceRelation({self.device}/{self.color})"
-
-    class Meta:
-        unique_together = [['device', 'color']]
-
-
-class ColorGroupRelation(models.Model):
-
-    # Creation values:
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    # Status values:
-    root = models.BooleanField(default=False)
-
-    # Relations values:
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    color = models.ForeignKey(Color, on_delete=models.CASCADE)
 
     # Model representation:
     def __str__(self) -> str:
-        return f"ColorGroupRelation({self.group}/{self.color})"
+        return f"GroupDeviceRelation({self.device}/{self.group})"
 
     class Meta:
-        unique_together = [['group', 'color']]
-
-
-class ColorCredentialRelation(models.Model):
-
-    # Creation values:
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    # Status values:
-    root = models.BooleanField(default=False)
-
-    # Relations values:
-    credential = models.ForeignKey(Credential, on_delete=models.CASCADE)
-    color = models.ForeignKey(Color, on_delete=models.CASCADE)
-
-    # Model representation:
-    def __str__(self) -> str:
-        return f"ColorCredentialRelation({self.credential}/{self.color})"
-
-    class Meta:
-        unique_together = [['credential', 'color']]
+        unique_together = [['device', 'group']]

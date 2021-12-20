@@ -6,6 +6,7 @@ from celery import shared_task
 def test_task1(number):
     return 'RKKR' + str(number)
 
-@shared_task(bind=True, track_started=True)
+@shared_task(bind=True, track_started=True, name='test-task-name')
 def test_task2(self, number):
-    return 'RKKR' + str(number)
+    print(self)
+    return 'RKKR', str(number), self.request.id, self.request.args, self.request.retries, self.request.parent_id

@@ -20,8 +20,8 @@ class NameValueValidator(validators.RegexValidator):
 
 @deconstructible
 class HostnameValueValidator(validators.RegexValidator):
-    regex = r'^[\w,-_. ]{8,32}$'
-    message = 'The object hostname must contain 8 to 32 digits, letters and special characters -, _, . or spaces.'
+    regex = r'^[\w,-_. ]{4,32}$'
+    message = 'The object hostname must contain 4 to 32 digits, letters and special characters -, _, . or spaces.'
     flags = 0
 
 
