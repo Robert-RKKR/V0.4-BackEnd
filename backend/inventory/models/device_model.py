@@ -55,14 +55,14 @@ class Device(models.Model):
     # Main model values:
     name = models.CharField(
         verbose_name='Device name',
-        max_length=32,
+        max_length=16,
         blank=False,
         unique=True,
-        validators=[hostname_validator],
+        validators=[name_validator],
         error_messages={
             'null': 'Hostname field is mandatory.',
             'blank': 'Hostname field is mandatory.',
-            'invalid': 'Enter the correct name value. It must contain 8 to 16 digits, letters and special characters -, _ or spaces.',
+            'invalid': 'Enter the correct name value. It must contain 4 to 16 digits, letters and special characters -, _ or spaces.',
         },
     )
     hostname = models.CharField(
@@ -123,7 +123,6 @@ class Device(models.Model):
 
     # Object managers:
     objects = NotDeleted()
-    active = ActiveManager()
 
     # Model representation:
     def __str__(self) -> str:

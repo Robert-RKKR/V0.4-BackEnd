@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 # Rest Framework Import:
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import permissions
 from rest_framework import status
 
 # Serializer Import:
@@ -16,13 +17,15 @@ from ..models.device_model import Device
 class DeviceView(APIView):
     """ Xxx """
 
+    permission_classes = [permissions.IsAuthenticated]
+
     def get(self, request, format=None):
         devices = Device.objects.all()
-        serializer = DeviceGetSerializer(devices, many=True)
+        serializer = DeviceSerializer(devices, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = DeviceModifySerializer(data=request.data)
+        serializer = DeviceSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -32,17 +35,19 @@ class DeviceView(APIView):
 class DeviceIdView(APIView):
     """ Xxx """
 
+    permission_classes = [permissions.IsAuthenticated]
+
     def get_object(self, pk):
         return get_object_or_404(Device, pk=pk)
 
     def get(self, request, pk, format=None):
         device = self.get_object(pk)
-        serializer = DeviceGetSerializer(device)
+        serializer = DeviceSerializer(device)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         device = self.get_object(pk)
-        serializer = DeviceModifySerializer(device, data=request.data)
+        serializer = DeviceSerializer(device, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
