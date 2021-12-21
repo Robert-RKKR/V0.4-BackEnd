@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 # Application Import:
-from inventory.models.device_model import Device
+from inventory.models.device_model import *
 
 
 class DeviceSerializer(serializers.ModelSerializer):
@@ -27,4 +27,24 @@ class DeviceSerializer(serializers.ModelSerializer):
             'secret',
             'token',
             'certificate',
+        ]
+
+
+class DeviceDataSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = DeviceData
+        fields = [
+            'id',
+            'device',
+            'created',
+            'version',
+            'hostname',
+            'uptime',
+            'reload_reason',
+            'running_image',
+            'config_register',
+            'hardware_list',
+            'serial_list',
+            'mac_list',
         ]

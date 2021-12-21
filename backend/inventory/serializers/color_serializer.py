@@ -5,25 +5,11 @@ from rest_framework import serializers
 from inventory.models.color_model import Color
 
 
-class ColorModifySerializer(serializers.ModelSerializer):
+class ColorSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Color
-        fields = [
-            'active',
-            'name',
-            'hexadecimal',
-            'description',
-            'devices',
-            'groups',
-            'credentials',
-        ]
-
-
-class ColorGetSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Color
+        depth = 1
         fields = [
             'id',
             'created',

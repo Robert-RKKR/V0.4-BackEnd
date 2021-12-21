@@ -154,7 +154,10 @@ class Device(models.Model):
 class DeviceData(models.Model):
 
     # Corelation witch device model:
-    device = models.ForeignKey(Device, on_delete=models.CASCADE, null=False, blank=False)
+    device = models.ForeignKey(
+        Device, on_delete=models.CASCADE,
+        null=False, blank=False, unique=True
+    )
 
     # Creation data:
     created = models.DateTimeField(auto_now_add=True)
@@ -169,3 +172,7 @@ class DeviceData(models.Model):
     hardware_list = models.JSONField(blank=True, null=True)
     serial_list = models.JSONField(blank=True, null=True)
     mac_list = models.JSONField(blank=True, null=True)
+
+    # Model representation:
+    def __str__(self) -> str:
+        return f"{self.pk}: device({self.device})"
