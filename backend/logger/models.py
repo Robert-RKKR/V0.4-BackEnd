@@ -1,4 +1,8 @@
-from django.db import models
+# Django Import:
+from django.db import connection, models
+
+# Application Import:
+from inventory.models import *
 
 # Loggers models:
 class LoggerData(models.Model):
@@ -9,15 +13,29 @@ class LoggerData(models.Model):
         (4, 'ERROR'),
         (5, 'CRITICAL'),
     )
+
+    # Timestamp:
     timestamp = models.DateTimeField(auto_now_add=True)
-    process = models.IntegerField()
-    application = models.CharField(max_length=128)
-    module = models.CharField(max_length=128, null=True)
+
+    # Data:
     severity = models.IntegerField(choices=SEVERITY)
     message = models.CharField(max_length=1024)
+    connection = models.BooleanField(default=False)
 
-
-class AdditionalData(models.Model):
-    name = models.CharField(max_length=64)
-    value = models.CharField(max_length=64)
-    logger = models.ForeignKey(LoggerData, on_delete=models.CASCADE)
+    # Models:
+    device = models.ForeignKey(
+        Device, on_delete=models.CASCADE,
+        null=True, blank=True
+    )
+    color = models.ForeignKey(
+        Color, on_delete=models.CASCADE,
+        null=True, blank=True
+    )
+    credential = models.ForeignKey(
+        Credential, on_delete=models.CASCADE,
+        null=True, blank=True
+    )
+    group = models.ForeignKey(
+        Group, on_delete=models.CASCADE,
+        null=True, blank=True
+    )

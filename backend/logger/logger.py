@@ -1,9 +1,9 @@
 # Python Imports:
-import os
 from typing import Tuple
 
 # Application Imports:
-from .models import LoggerData, AdditionalData
+from .models import LoggerData
+from inventory.models import *
 
 # Severity constants declaration:
 FULLDEBUG = 0
@@ -19,7 +19,22 @@ class Logger():
     def __init__(self, application: str = 'NoName') -> None:
         self.application = application
 
-    def debug(self, message: str, module: str = None, additional_data: dict = False) -> Tuple:
+    def debug(self, message: str, model: object = None, connection: bool = False) -> Tuple:
+        """
+            Create a new log based on the following data:
+
+                Method attributes:
+                -----------------
+                message: string
+                    Logging message string value. 
+                model: string
+                    Module or function name.
+                connection: boolean
+                    True if related witch connection log.
+        """
+        return self.__log(DEBUG, message, model, connection)
+
+    def info(self, message: str, model: object = None, connection: bool = False) -> Tuple:
         """
             Create a new log based on the following data:
 
@@ -29,28 +44,13 @@ class Logger():
                     Logging message string value. 
                 module: string
                     Module or function name.
-                additional_data: dict
-                    Optional data in dict format, added to AdditionalData models.
+                connection: boolean
+                    True if related witch connection log.
         """
-        return self.__log(DEBUG, message, module, additional_data)
-
-    def info(self, message: str, module: str = None, additional_data: dict = False) -> Tuple:
-        """
-            Create a new log based on the following data:
-
-                Method attributes:
-                -----------------
-                message: string
-                    Logging message string value. 
-                module: string
-                    Module or function name.
-                additional_data: dict
-                    Optional data in dict format, added to AdditionalData models.
-        """
-        return self.__log(INFO, message, module, additional_data)
+        return self.__log(INFO, message, model, connection)
 
 
-    def warning(self, message: str, module: str = None, additional_data: dict = False) -> Tuple:
+    def warning(self, message: str, model: object = None, connection: bool = False) -> Tuple:
         """
             Create a new log based on the following data:
 
@@ -60,28 +60,13 @@ class Logger():
                     Logging message string value. 
                 module: string
                     Module or function name.
-                additional_data: dict
-                    Optional data in dict format, added to AdditionalData models.
+                connection: boolean
+                    True if related witch connection log.
         """
-        return self.__log(WARNING, message, module, additional_data)
+        return self.__log(WARNING, message, model, connection)
 
 
-    def error(self, message: str, module: str = None, additional_data: dict = False) -> Tuple:
-        """
-            Create a new log based on the following data:
-
-                Method attributes:
-                -----------------
-                message: string
-                    Logging message string value. 
-                module: string
-                    Module or function name.
-                additional_data: dict
-                    Optional data in dict format, added to AdditionalData models.
-        """
-        return self.__log(ERROR, message, module, additional_data)
-
-    def critical(self, message: str, module: str = None, additional_data: dict = False) -> Tuple:
+    def error(self, message: str, model: object = None, connection: bool = False) -> Tuple:
         """
             Create a new log based on the following data:
 
@@ -91,30 +76,63 @@ class Logger():
                     Logging message string value. 
                 module: string
                     Module or function name.
-                additional_data: dict
-                    Optional data in dict format, added to AdditionalData models.
+                connection: boolean
+                    True if related witch connection log.
         """
-        return self.__log(CRITICAL, message, module, additional_data)
+        return self.__log(ERROR, message, model, connection)
 
-    def __log(self, severity, message: str, module: str, additional_data: dict) -> Tuple:
+    def critical(self, message: str, model: object = None, connection: bool = False) -> Tuple:
+        """
+            Create a new log based on the following data:
+
+                Method attributes:
+                -----------------
+                message: string
+                    Logging message string value. 
+                module: string
+                    Module or function name.
+                connection: boolean
+                    True if related witch connection log.
+        """
+        return self.__log(CRITICAL, message, model, connection)
+
+    def __log(self, severity, message: str, model: object, connection: bool) -> Tuple:
         """ Create new log in Database """
-        new_log = None
-        new_additional_data = None
 
-        new_log = LoggerData.objects.create(
-            process = os.getpid(),
-            application = str(self.application),
-            module = str(module),
-            severity = severity,
-            message = str(message),
-        )
+        # Define Model name:
+        model_name = None
 
-        if additional_data is not False:
-            for data in additional_data:
-                new_additional_data = AdditionalData.objects.create(
-                    name = data,
-                    value = additional_data[data],
-                    logger = new_log,
-                )
+        # Collect log data:
+        log_data = {
+            'severity': severity,
+            'message': str(message),
+            'connection': connection,
+        }
+
+        # Check if Model is object:
+        if isinstance(model, object):
+
+            # Check model type:
+            if model is None:
+                pass
+            elif isinstance(model, Device):
+                log_data['device'] = model
+            elif isinstance(model, Color):
+                log_data['color'] = model
+            elif isinstance(model, Credential):
+                log_data['credential'] = model
+            elif isinstance(model, Group):
+                log_data['group'] = model
+            else:
+                raise 'Provided model is not supported by log'
             
-        return (new_log, new_additional_data)
+            # Define log:
+            new_log = None
+
+            # Create nwe log:
+            new_log = LoggerData.objects.create(**log_data)
+
+            return (new_log)
+
+        else:
+            raise 'Provided model is not object type'
