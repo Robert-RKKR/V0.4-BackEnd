@@ -20,7 +20,7 @@ from ..models.device_model import Device
 class DeviceView(APIView, TenResultsPagination):
     """ Xxx """
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
         # Collect all objects from database:

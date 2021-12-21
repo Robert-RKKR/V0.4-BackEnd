@@ -18,7 +18,7 @@ from ..models.color_model import ColorGroupRelation
 class ColorView(APIView):
     """ Xxx """
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
         many_objects = Color.objects.all()
@@ -36,7 +36,7 @@ class ColorView(APIView):
 class ColorIdView(APIView):
     """ Xxx """
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
     def get_object(self, pk):
         return get_object_or_404(Color, pk=pk)
