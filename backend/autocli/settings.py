@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # Local Apps:
     'inventory.apps.InventoryConfig',
     'logger.apps.LoggerConfig',
+    'administration.apps.AdministrationConfig',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +62,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'autocli.urls'
+AUTH_USER_MODEL = 'administration.Administrator'
+ACCOUNT_EMAIL_REQUIRED = True
 
 TEMPLATES = [
     {
@@ -100,7 +103,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'password',
         'HOST': '127.0.0.1',
-        'PORT': 5006,
+        'PORT': 5008,
     }
 }
 
@@ -116,6 +119,7 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     ),
+    #'USER_DETAILS_SERIALIZER':'administration.serializer.AdministratorDetailsSerializer'
 }
 
 
