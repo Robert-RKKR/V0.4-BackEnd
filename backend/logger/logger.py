@@ -124,7 +124,7 @@ class Logger():
             elif isinstance(model, Group):
                 log_data['group'] = model
             else:
-                raise 'Provided model is not supported by log'
+                raise TypeError('Provided model is not supported by log')
             
             # Define log:
             new_log = None
@@ -135,4 +135,4 @@ class Logger():
             return (new_log)
 
         else:
-            raise 'Provided model is not object type'
+            raise TypeError('Provided model is not object type')

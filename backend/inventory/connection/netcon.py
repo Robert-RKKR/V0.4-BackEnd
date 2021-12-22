@@ -21,7 +21,7 @@ class NetCon:
 
     def __init__(self, device: Device) -> None:
         """
-            The NetCon class uses netmiko library, to establish a SSH connection with networks devices.
+            The NetCon class uses netmiko library, to establish a SSH connection with networks device.
 
                 Class attributes:
                 -----------------
@@ -59,7 +59,7 @@ class NetCon:
                 self.device_type = 'cisco_nxos'
         else:
             self.status = False # Change connection status to False.
-            raise ConnectionError
+            raise TypeError('Provided device is not instance of Device class')
 
         # Collect user information:
         try:

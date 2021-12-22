@@ -40,19 +40,17 @@ class Color(models.Model):
 
     # Main model values:
     name = models.CharField(
-        verbose_name='Color name',
-        max_length=16,
+        max_length=32,
         blank=False,
         unique=True,
         validators=[name_validator],
         error_messages={
             'null': 'Name field is mandatory.',
             'blank': 'Name field is mandatory.',
-            'invalid': 'Enter the correct name value. It must contain 8 to 16 digits, letters and special characters -, _ or spaces.',
+            'invalid': 'Enter the correct name value. It must contain 8 to 32 digits, letters and special characters -, _ or spaces.',
         },
     )
     hexadecimal = models.CharField(
-        verbose_name='Color hexadecimal value',
         unique=True,
         max_length=7,
         validators=[color_validator],
@@ -63,22 +61,24 @@ class Color(models.Model):
         },
     )
     description = models.CharField(
-        verbose_name='Credentials description',
         max_length=256, default='Credentials description.',
         validators=[description_validator],
         error_messages={
-            'invalid': 'Enter the correct description value. It must contain 8 to 16 digits, letters and special characters -, _, . or spaces.',
+            'invalid': 'Enter the correct description value. It must contain 8 to 256 digits, letters and special characters -, _, . or spaces.',
         },
     )
 
     # Relationships with other models:
-    devices = models.ManyToManyField(Device, through='ColorDeviceRelation', null=True, blank=True)
-    groups = models.ManyToManyField(Group, through='ColorGroupRelation', null=True, blank=True)
-    credentials = models.ManyToManyField(Credential, through='ColorCredentialRelation', null=True, blank=True)
+    devices = models.ManyToManyField(Device, through='ColorDeviceRelation', blank=True)
+    groups = models.ManyToManyField(Group, through='ColorGroupRelation', blank=True)
+    credentials = models.ManyToManyField(Credential, through='ColorCredentialRelation', blank=True)
 
     # Model representation:
     def __str__(self) -> str:
         return f"{self.pk}: {self.name}"
+
+    # Object managers:
+    objects = NotDeleted()
 
     # Override default Delete method:
     def delete(self):
@@ -94,15 +94,6 @@ class Color(models.Model):
         else:
             # Change deleted value to True, to inform that object is deleted:
             self.deleted = True
-
-    # Object managers:
-    objects = NotDeleted()
-
-    # Meta sub class:
-    class Meta:
-        app_label = 'inventory'
-        verbose_name = 'Color'
-        verbose_name_plural = 'Colors'
 
 
 # Relations models:

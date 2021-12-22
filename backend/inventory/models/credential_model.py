@@ -33,31 +33,23 @@ class Credential(models.Model):
 
     # Main model values:
     name = models.CharField(
-        verbose_name='Credential name',
-        max_length=16,
+        max_length=32,
         blank=False,
         unique=True,
         validators=[name_validator],
         error_messages={
             'null': 'Name field is mandatory.',
             'blank': 'Name field is mandatory.',
-            'invalid': 'Enter the correct name value. It must contain 8 to 16 digits, letters and special characters -, _ or spaces.',
+            'invalid': 'Enter the correct name value. It must contain 8 to 32 digits, letters and special characters -, _ or spaces.',
         },
     )
-    username = models.CharField(
-        verbose_name='User login',
-        max_length=64, blank=False
-    )
-    password = models.CharField(
-        verbose_name='User password',
-        max_length=64, null=True, blank=True,
-    )
+    username = models.CharField(max_length=64, blank=False)
+    password = models.CharField(max_length=64, null=True, blank=True)
     description = models.CharField(
-        verbose_name='Credentials description',
         max_length=256, default='Credentials description.',
         validators=[description_validator],
         error_messages={
-            'invalid': 'Enter the correct description value. It must contain 8 to 16 digits, letters and special characters -, _, . or spaces.',
+            'invalid': 'Enter the correct description value. It must contain 8 to 256 digits, letters and special characters -, _, . or spaces.',
         },
     )
 
@@ -79,9 +71,3 @@ class Credential(models.Model):
         else:
             # Change deleted value to True, to inform that object is deleted:
             self.deleted = True
-
-    # Meta sub class:
-    class Meta:
-        app_label = 'inventory'
-        verbose_name = 'Credential'
-        verbose_name_plural = 'Credentials'

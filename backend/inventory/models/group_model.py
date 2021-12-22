@@ -30,23 +30,21 @@ class Group(models.Model):
 
     # Main model values:
     name = models.CharField(
-        verbose_name='Group name',
-        max_length=16,
+        max_length=32,
         blank=False,
         unique=True,
         validators=[name_validator],
         error_messages={
             'null': 'Name field is mandatory.',
             'blank': 'Name field is mandatory.',
-            'invalid': 'Enter the correct name value. It must contain 4 to 16 digits, letters and special characters -, _ or spaces.',
+            'invalid': 'Enter the correct name value. It must contain 4 to 32 digits, letters and special characters -, _ or spaces.',
         },
     )
     description = models.CharField(
-        verbose_name='Credentials description',
         max_length=256, default='Credentials description.',
         validators=[description_validator],
         error_messages={
-            'invalid': 'Enter the correct description value. It must contain 8 to 16 digits, letters and special characters -, _, . or spaces.',
+            'invalid': 'Enter the correct description value. It must contain 8 to 256 digits, letters and special characters -, _, . or spaces.',
         },
     )
 
@@ -57,26 +55,20 @@ class Group(models.Model):
     def __str__(self) -> str:
         return f"{self.pk}: {self.name}"
 
-    # # Override default Delete method:
-    # def delete(self):
-    #     """
-    #         Override the default Delete method to see if the device was created by the Root user,
-    #         if true don't change anything, otherwise change deleted value to true.
-    #     """
-    #     # Check if root value is True:
-    #     if self.root == True:
-    #         # Inform the user that the object cannot be deleted because is a root object:
-    #         assert self.pk is not None, (
-    #             f"{self._meta.object_name} object can't be deleted because its a root object.")
-    #     else:
-    #         # Change deleted value to True, to inform that object is deleted:
-    #         self.deleted = True
-
-    # Meta sub class:
-    class Meta:
-        app_label = 'inventory'
-        verbose_name = 'Group'
-        verbose_name_plural = 'Groups'
+    # Override default Delete method:
+    def delete(self):
+        """
+            Override the default Delete method to see if the device was created by the Root user,
+            if true don't change anything, otherwise change deleted value to true.
+        """
+        # Check if root value is True:
+        if self.root == True:
+            # Inform the user that the object cannot be deleted because is a root object:
+            assert self.pk is not None, (
+                f"{self._meta.object_name} object can't be deleted because its a root object.")
+        else:
+            # Change deleted value to True, to inform that object is deleted:
+            self.deleted = True
 
 
 # Relations models:
