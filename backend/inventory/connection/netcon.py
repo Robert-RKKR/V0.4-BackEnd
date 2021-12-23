@@ -9,9 +9,11 @@ from netmiko.ssh_exception import  AuthenticationException
 from netmiko.ssh_exception import NetMikoTimeoutException
 from paramiko.ssh_exception import SSHException
 
-# Application Import:
+# Model Import:
+from ..models.device_model import Device
+
+# Logger import:
 from logger.logger import Logger
-from inventory.models import Device
 
 
 class NetCon:
@@ -67,14 +69,13 @@ class NetCon:
             self.password = self.device.credential.password
         except AttributeError as error:
             # Use default user data from settings:
-            # Add settings.
             self.username = 'admin'
-            self.password = 'admin'
+            self.password = 'password'
 
         # Try connect to device:
         try:
             # Log start of SSH connection:
-            NetCon.logger.debug('SSH connection has been started.', self.device)
+            NetCon.logger.debug('SSH connection has been started.', self.device, True)
 
             # Check if device type is not a autodetect type:
             if self.device.device_type != 0:
@@ -109,21 +110,22 @@ class NetCon:
                 # Connect to device:
                 self.__ssh_connect()
 
-            NetCon.logger.info('SSH connection has been established.', self.device)
+            # Log end of SSH connection
+            NetCon.logger.info('SSH connection has been established.', self.device, True)
             self.status = True # Change connection status to True:
 
         # Handel exceptions:
         except AuthenticationException as error:
-            NetCon.logger.error(error, self.device)
+            NetCon.logger.error(error, self.device, True)
             self.status = False # Change connection status to False.
         except NetMikoTimeoutException as error:
-            NetCon.logger.error(error, self.device)
+            NetCon.logger.error(error, self.device, True)
             self.status = False # Change connection status to False.
         except ssh_exception.SSHException as error:
-            NetCon.logger.error(error, self.device)
+            NetCon.logger.error(error, self.device, True)
             self.status = False # Change connection status to False.
         except SSHException as error:
-            NetCon.logger.error(error, self.device)
+            NetCon.logger.error(error, self.device, True)
             self.status = False # Change connection status to False.
 
     def __ssh_connect(self):
@@ -139,7 +141,7 @@ class NetCon:
 
     def __del__(self):
         """ End of SSH connection """
-        NetCon.logger.info('SSH session ended.', self.device)
+        NetCon.logger.info('SSH session ended.', self.device, True)
 
     def __repr__(self) -> str:
         """ Connection class representation is IP address and port number of Https server. """
@@ -153,7 +155,7 @@ class NetCon:
 
         # Check connection status:
         if self.status is False:
-            NetCon.logger.error('No connection available.', self.device)
+            NetCon.logger.error('No connection available.', self.device, True)
             return None
 
         else:
@@ -166,15 +168,15 @@ class NetCon:
             # Try to sent command into network device:
             try:
                 # Collect data from device:
-                NetCon.logger.debug('The sending of a new CLI command has been started.\nCommand: {command}', self.device)
+                NetCon.logger.debug('The sending of a new CLI command has been started.\nCommand: {command}', self.device, True)
                 if isinstance(command, list):
                     for one_command in command:
                         return_data = self.connection.send_command(one_command)
                 else:
                     return_data = self.connection.send_command(command)
-                NetCon.logger.debug('The CLI command has been sent.', self.device)
+                NetCon.logger.debug('The CLI command has been sent.', self.device, True)
             except UnboundLocalError as error:
-                NetCon.logger.error(error, self.device)
+                NetCon.logger.error(error, self.device, True)
                 return error
 
             # Finish clock count & method execution time:
@@ -192,7 +194,7 @@ class NetCon:
 
         # Check connection status:
         if self.status is False:
-            NetCon.logger.error('No connection available.', self.device)
+            NetCon.logger.error('No connection available.', self.device, True)
             return None
 
         else:
@@ -204,14 +206,14 @@ class NetCon:
 
             # Try to sent command into network device:
             try:
-                NetCon.logger.debug('The sending of a new CLI command has started.\nCommand: {command}', self.device)
+                NetCon.logger.debug('The sending of a new CLI command has started.\nCommand: {command}', self.device, True)
                 return_data = self.connection.send_config_set(command)
-                NetCon.logger.debug('The CLI command has been sent.', self.device)
+                NetCon.logger.debug('The CLI command has been sent.', self.device, True)
             except UnboundLocalError as error:
                 NetCon.logger.error(error, self.device)
                 return error
             except:
-                NetCon.logger.error('CLI command error.', self.device)
+                NetCon.logger.error('CLI command error.', self.device, True)
 
             # Finish clock count & method execution time:
             finish_time = time.perf_counter()

@@ -3,9 +3,11 @@ import requests
 import xmltodict
 import json
 
-# Application Import:
+# Model Import:
+from ..models.device_model import Device
+
+# Logger import:
 from logger.logger import Logger
-from inventory.models import Device
 
 
 class RestCon:
@@ -80,7 +82,7 @@ class RestCon:
         # Try to connect with device:
         try:
             # Log starting of a new connection to https server:
-            RestCon.logger.info('Starting a new Https connection.', self.device)
+            RestCon.logger.info('Starting a new Https connection.', self.device, True)
 
             # Collect user information:
             try:
@@ -110,31 +112,31 @@ class RestCon:
                 )
 
             # Log when https connection was established:
-            RestCon.logger.debug('Https connection was established.', self.device)
+            RestCon.logger.debug('Https connection was established.', self.device, True)
             
             # Convert HTTPS response:
             return self.__connect(response)
 
         except requests.exceptions.SSLError as error:
-            RestCon.logger.error(error, self.device)
+            RestCon.logger.error(error, self.device, True)
             # Change connection status to False:
             self.status = False
             return self.status
 
         except requests.exceptions.Timeout as error:
-            RestCon.logger.error(error, self.device) 
+            RestCon.logger.error(error, self.device, True) 
             # Change connection status to False:
             self.status = False
             return self.status
 
         except requests.exceptions.InvalidURL as error:
-            RestCon.logger.error(error, self.device)        
+            RestCon.logger.error(error, self.device, True)        
             # Change connection status to False:
             self.status = False
             return self.status
 
         except requests.exceptions.ConnectionError as error:
-            RestCon.logger.error(error, self.device)        
+            RestCon.logger.error(error, self.device, True)        
             # Change connection status to False:
             self.status = False
             return self.status
@@ -156,7 +158,7 @@ class RestCon:
             self.json_status = True
         except:
             # Log when python dictionary convert process fail:
-            RestCon.logger.warning('Python JSON -> dictionary convert process fail.', self.device)
+            RestCon.logger.warning('Python JSON -> dictionary convert process fail.', self.device, True)
             convertResponse = False
             self.json_status = False
 
@@ -166,38 +168,38 @@ class RestCon:
                 self.xml_status = True
             except:
                 # Log when python dictionary convert process fail:
-                RestCon.logger.warning('Python XML -> dictionary convert process fail.', self.device)
+                RestCon.logger.warning('Python XML -> dictionary convert process fail.', self.device, True)
                 convertResponse = False
                 self.xml_status = False
 
         # Check response status:
         if response.status_code < 200: # All respons from 0 to 199.
-            RestCon.logger.warning(f'Connection to {self.device.hostname}, was a informational HTTPS request.', self.device)
+            RestCon.logger.warning(f'Connection to {self.device.hostname}, was a informational HTTPS request.', self.device, True)
             # Change connection status to True:
             self.status = True
 
         elif response.status_code < 300: # All respons from 200 to 299.
-            RestCon.logger.info(f'Connection to {self.device.hostname}, was a success HTTPS request.', self.device)
+            RestCon.logger.info(f'Connection to {self.device.hostname}, was a success HTTPS request.', self.device, True)
             # Change connection status to True:
             self.status = True
 
         elif response.status_code < 400: # All respons from 300 to 399.
-            RestCon.logger.warning(f'Connection to {self.device.hostname}, returned redirection HTTPS error.', self.device)
+            RestCon.logger.warning(f'Connection to {self.device.hostname}, returned redirection HTTPS error.', self.device, True)
             # Change connection status to False:
             self.status = False
 
         elif response.status_code < 500: # All respons from 400 to 499.
-            RestCon.logger.error(f'Connection to {self.device.hostname}, returned client HTTPS error.', self.device)
+            RestCon.logger.error(f'Connection to {self.device.hostname}, returned client HTTPS error.', self.device, True)
             # Change connection status to False:
             self.status = False
 
         elif response.status_code < 600: # All respons from 500 to 599.
-            RestCon.logger.error(f'Connection to {self.device.hostname}, returned server HTTPS error.', self.device)
+            RestCon.logger.error(f'Connection to {self.device.hostname}, returned server HTTPS error.', self.device, True)
             # Change connection status to False:
             self.status = False
 
         # Log https response type:
-        RestCon.logger.debug(f'Https response returned {response.status_code} code.', self.device)
+        RestCon.logger.debug(f'Https response returned {response.status_code} code.', self.device, True)
         
         # Return Https response in Json format:
         return convertResponse
