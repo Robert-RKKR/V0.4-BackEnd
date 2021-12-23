@@ -45,7 +45,8 @@ class Administrator(AbstractBaseUser, PermissionsMixin):
         error_messages={
             'null': 'Username field is mandatory.',
             'blank': 'Username field is mandatory.',
-            'invalid': 'Enter the correct username value. It must contain 4 to 32 digits, letters and special characters -, _ or spaces.',
+            'unique': 'Administrator with this username already exists.',
+            'invalid': 'Enter the correct username value. It must contain 4 to 32 digits, letters and spaces.',
         },
     )
     password = models.CharField(
@@ -55,10 +56,21 @@ class Administrator(AbstractBaseUser, PermissionsMixin):
         error_messages={
             'null': 'Password field is mandatory.',
             'blank': 'Password field is mandatory.',
-            'invalid': 'Enter the correct password value. It requires at least one lowercase letter, one uppercase letter, one digit and one special character, minimum 8 characters.',
+            'invalid': 'Enter the correct password value. It requires at least one lowercase letter, one uppercase letter, one digit and one special character (@$!%*?&), minimum 8 characters.',
         },
     )
-    email = models.EmailField(max_length=128, unique=True, blank=True, null=True)
+    email = models.EmailField(
+        max_length=128,
+        unique=True,
+        blank=True,
+        null=True,
+        error_messages={
+            'null': 'E-mail field is mandatory.',
+            'blank': 'E-mail field is mandatory.',
+            'unique': 'Administrator with this e-mail already exists.',
+            'invalid': 'Enter the correct e-mail value.',
+        },
+    )
 
     # Personal values:
     first_name = models.CharField(max_length=32)

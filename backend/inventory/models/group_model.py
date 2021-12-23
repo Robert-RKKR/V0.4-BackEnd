@@ -37,6 +37,7 @@ class Group(models.Model):
         error_messages={
             'null': 'Name field is mandatory.',
             'blank': 'Name field is mandatory.',
+            'unique': 'Group with this name already exists.',
             'invalid': 'Enter the correct name value. It must contain 4 to 32 digits, letters and special characters -, _ or spaces.',
         },
     )

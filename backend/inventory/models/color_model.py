@@ -47,6 +47,7 @@ class Color(models.Model):
         error_messages={
             'null': 'Name field is mandatory.',
             'blank': 'Name field is mandatory.',
+            'unique': 'Color with this name already exists.',
             'invalid': 'Enter the correct name value. It must contain 8 to 32 digits, letters and special characters -, _ or spaces.',
         },
     )
@@ -57,6 +58,7 @@ class Color(models.Model):
         error_messages={
             'null': 'Colour field is mandatory.',
             'blank': 'Colour field is mandatory.',
+            'unique': 'Color with this hexadecimal value already exists.',
             'invalid': 'Enter the correct colour value. It must be a 3/6 hexadecimal number with # character on begining.',
         },
     )
