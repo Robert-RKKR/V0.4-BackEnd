@@ -13,11 +13,16 @@ class AdministratorManager(BaseUserManager):
             raise ValueError('Administrator must have a password value.')
 
         # Verify collected data about new administrator:
-        email = self.normalize_email(email)
-        new_administrator = self.model(
-            username=username,
-            email=email,
-        )
+        if email is None:
+            new_administrator = self.model(
+                username=username,
+            )
+        else:
+            email = self.normalize_email(email)
+            new_administrator = self.model(
+                username=username,
+                email=email,
+            )
         new_administrator.active = is_active
         new_administrator.staff = is_staff
         new_administrator.superuser = is_superuser
