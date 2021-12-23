@@ -14,4 +14,5 @@ urlpatterns = [
 
     # Applications URL-s:
     path('api/inventory/', include('inventory.urls')),
+    path('api/administration/', include('administration.urls')),
 ]

@@ -2,7 +2,7 @@
 from django.db import models
 
 # Application Import:
-from administrator_model import Administrator
+from .administrator_model import Administrator
 
 class Settings(models.Model):
 

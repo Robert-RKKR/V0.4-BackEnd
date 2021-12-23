@@ -12,7 +12,7 @@ from ..validators import (
 )
 
 # Application Import:
-from administrator_manager_model import AdministratorManager
+from .administrator_manager_model import AdministratorManager
 
 
 class Administrator(AbstractBaseUser, PermissionsMixin):

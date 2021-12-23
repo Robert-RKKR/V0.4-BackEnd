@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 # Application Import:
-from inventory.models.device_model import *
+from ..models.device_model import *
 
 
 class DeviceSerializer(serializers.ModelSerializer):
@@ -13,6 +13,7 @@ class DeviceSerializer(serializers.ModelSerializer):
             'id',
             'created',
             'updated',
+            'root',
             'active',
             'ssh_status',
             'https_status',

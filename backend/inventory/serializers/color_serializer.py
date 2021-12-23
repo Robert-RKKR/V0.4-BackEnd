@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 # Application Import:
-from inventory.models.color_model import Color
+from ..models.color_model import Color
 
 
 class ColorSerializer(serializers.ModelSerializer):
@@ -14,6 +14,7 @@ class ColorSerializer(serializers.ModelSerializer):
             'id',
             'created',
             'updated',
+            'root',
             'active',
             'name',
             'hexadecimal',

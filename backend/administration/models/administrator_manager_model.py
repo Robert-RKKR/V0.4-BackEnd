@@ -24,6 +24,8 @@ class AdministratorManager(BaseUserManager):
         new_administrator.set_password(password)
         new_administrator.save(using=self._db)
 
+        return new_administrator
+
     def create_user(self, username, password, email=None, **extra_fields):
         return self._create_user(
             username=username,
