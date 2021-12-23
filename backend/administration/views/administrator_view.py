@@ -39,10 +39,6 @@ class DeviceView(APIView, TenResultsPagination):
         # Create new administrator:
         serializer = AdministratorPostSerializer(data=request.data)
         if serializer.is_valid():
-            new_administrator = serializer.save()
-
-            # Create user application settings:
-            # user_settings = Settings.objects.create(administrator=new_administrator)
-            
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
