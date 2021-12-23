@@ -42,3 +42,9 @@ class DeviceView(APIView, TenResultsPagination):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+from rest_framework import generics
+class Test(generics.CreateAPIView):
+    queryset = Administrator.objects.all()
+    serializer_class = AdministratorSerializer

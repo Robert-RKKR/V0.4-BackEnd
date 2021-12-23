@@ -39,24 +39,3 @@ class AdministratorPostSerializer(serializers.ModelSerializer):
             'password',
             'email',
         ]
-
-
-# class AdministratorPostSerializer(serializers.ModelSerializer):
-
-#     password = serializers.CharField(
-#         max_length=128, min_length=8, write_only=True
-#     )
-    
-#     class Meta:
-#         model = Administrator
-#         fields = [
-#             'username',
-#             'password',
-#             'email',
-#         ]
-
-#     def validate(self, attrs):
-#         email = attrs.get('email', '')
-#         username = attrs.get('username', '')
-
-#         return attrs
