@@ -174,32 +174,29 @@ class RestCon:
 
         # Check response status:
         if response.status_code < 200: # All respons from 0 to 199.
-            RestCon.logger.warning(f'Connection to {self.device.hostname}, was a informational HTTPS request.', self.device, True)
+            RestCon.logger.warning(f'Connection to {self.device.hostname}, was a informational HTTPS request.\nHttps response returned {response.status_code} code.', self.device, True)
             # Change connection status to True:
             self.status = True
 
         elif response.status_code < 300: # All respons from 200 to 299.
-            RestCon.logger.info(f'Connection to {self.device.hostname}, was a success HTTPS request.', self.device, True)
+            RestCon.logger.debug(f'Connection to {self.device.hostname}, was a success HTTPS request.\nHttps response returned {response.status_code} code.', self.device, True)
             # Change connection status to True:
             self.status = True
 
         elif response.status_code < 400: # All respons from 300 to 399.
-            RestCon.logger.warning(f'Connection to {self.device.hostname}, returned redirection HTTPS error.', self.device, True)
+            RestCon.logger.warning(f'Connection to {self.device.hostname}, returned redirection HTTPS error.\nHttps response returned {response.status_code} code.', self.device, True)
             # Change connection status to False:
             self.status = False
 
         elif response.status_code < 500: # All respons from 400 to 499.
-            RestCon.logger.error(f'Connection to {self.device.hostname}, returned client HTTPS error.', self.device, True)
+            RestCon.logger.error(f'Connection to {self.device.hostname}, returned client HTTPS error.\nHttps response returned {response.status_code} code.', self.device, True)
             # Change connection status to False:
             self.status = False
 
         elif response.status_code < 600: # All respons from 500 to 599.
-            RestCon.logger.error(f'Connection to {self.device.hostname}, returned server HTTPS error.', self.device, True)
+            RestCon.logger.error(f'Connection to {self.device.hostname}, returned server HTTPS error.\nHttps response returned {response.status_code} code.', self.device, True)
             # Change connection status to False:
             self.status = False
-
-        # Log https response type:
-        RestCon.logger.debug(f'Https response returned {response.status_code} code.', self.device, True)
         
         # Return Https response in Json format:
         return convertResponse
