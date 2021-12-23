@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 
 # Celery Import:
 from celery import shared_task
+from autocli.celery import app
 
 # Application Import:
 from ..connection.netcon import NetCon
@@ -16,7 +17,6 @@ from logger.logger import Logger
 
 # Logger class initiation:
 logger = Logger('single_device_check')
-
 
 @shared_task(bind=True, track_started=True, name='Check device status')
 def single_device_check(self, device_pk: int) -> bool:
@@ -74,6 +74,11 @@ def single_device_check(self, device_pk: int) -> bool:
                     device.ssh_status = False
                     status = False
                     device.save()
+
+        else:  # If device is not avaliable log error:
+
+            # Log 404 device error:
+            logger.debug(f'Device with ID {device_pk}, is not avaliable (Error 404).', device)
 
     else: # If device variable is not a intiger, raise type error:
         raise TypeError('Device variable can only be a intiger.')
