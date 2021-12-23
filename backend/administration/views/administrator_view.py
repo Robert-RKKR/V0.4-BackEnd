@@ -7,6 +7,7 @@ from rest_framework import (
 
 # Application Import:
 from ..models.administrator_model import Administrator
+from ..models.settings_model import Settings
 
 # Serializers Import:
 from ..serializers.administrator_serializer import (
@@ -35,8 +36,13 @@ class DeviceView(APIView, TenResultsPagination):
         return response
 
     def post(self, request, format=None):
+        # Create new administrator:
         serializer = AdministratorPostSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            new_administrator = serializer.save()
+
+            # Create user application settings:
+            user_settings = Settings.objects.create(administrator=new_administrator)
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

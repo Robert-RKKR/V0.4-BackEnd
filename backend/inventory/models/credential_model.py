@@ -44,7 +44,14 @@ class Credential(models.Model):
             'invalid': 'Enter the correct name value. It must contain 8 to 32 digits, letters and special characters -, _ or spaces.',
         },
     )
-    username = models.CharField(max_length=64, blank=False)
+    username = models.CharField(
+        max_length=64,
+        error_messages={
+            'null': 'Username field is mandatory.',
+            'blank': 'Username field is mandatory.',
+            'invalid': 'Enter the correct username value.',
+        },
+    )
     password = models.CharField(max_length=64, null=True, blank=True)
     description = models.CharField(
         max_length=256, default='Credentials description.',
