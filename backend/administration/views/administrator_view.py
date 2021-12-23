@@ -42,7 +42,7 @@ class DeviceView(APIView, TenResultsPagination):
             new_administrator = serializer.save()
 
             # Create user application settings:
-            user_settings = Settings.objects.create(administrator=new_administrator)
+            # user_settings = Settings.objects.create(administrator=new_administrator)
             
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

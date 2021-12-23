@@ -1,8 +1,6 @@
 # Django Import:
 from django.db import models
 
-# Application Import:
-from .administrator_model import Administrator
 
 class Settings(models.Model):
 
@@ -15,7 +13,10 @@ class Settings(models.Model):
     deleted = models.BooleanField(default=False)
 
     # Administrator:
-    administrator = models.OneToOneField(Administrator, on_delete=models.CASCADE)
+    administrator = models.OneToOneField(
+        'Administrator',
+        on_delete=models.CASCADE,
+    )
 
     # User application settings:
     default_connection_username = models.CharField(

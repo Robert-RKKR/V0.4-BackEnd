@@ -1,6 +1,9 @@
 # Django Import:
 from django.contrib.auth.models import BaseUserManager
 
+# Application Import:
+from ..models.settings_model import Settings
+
 
 class AdministratorManager(BaseUserManager):
 
@@ -28,6 +31,9 @@ class AdministratorManager(BaseUserManager):
         new_administrator.superuser = is_superuser
         new_administrator.set_password(password)
         new_administrator.save(using=self._db)
+
+        # Create user application settings:
+        user_settings = Settings.objects.create(administrator=new_administrator)
 
         return new_administrator
 
