@@ -2,6 +2,7 @@
 from django.shortcuts import render
 
 # Application Import:
+from ..tasks.single_device_collect import single_device_ssh_collect
 from ..tasks.single_device_check import single_device_check
 from ..tasks.tasks import test_task1, test_task2
 
@@ -11,7 +12,8 @@ def test(request):
         'output': 'RKKR'
     }
 
-    data['output'] = single_device_check.delay(1)
+    data['output'] = single_device_ssh_collect.delay(1)
+    # data['output'] = single_device_check.delay(1)
     # data['output'] = single_device_check.delay(1)
     # print(single_device_check.name)
 

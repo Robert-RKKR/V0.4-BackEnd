@@ -81,7 +81,7 @@ def single_device_check(self, device_pk: int) -> bool:
             logger.debug(f'Device with ID {device_pk}, is not avaliable (Error 404).', device)
 
     else: # If device variable is not a intiger, raise type error:
-        raise TypeError('Device variable can only be a intiger.')
+        raise TypeError('Device PK variable can only be a intiger.')
 
     # Return single device check status:
     return status

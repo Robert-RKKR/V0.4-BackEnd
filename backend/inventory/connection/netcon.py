@@ -168,7 +168,7 @@ class NetCon:
             # Try to sent command into network device:
             try:
                 # Collect data from device:
-                NetCon.logger.debug('The sending of a new CLI command has been started.\nCommand: {command}', self.device, True)
+                NetCon.logger.debug(f'The sending of a new CLI command has been started. Command: {command}', self.device, True)
                 if isinstance(command, list):
                     for one_command in command:
                         return_data = self.connection.send_command(one_command)

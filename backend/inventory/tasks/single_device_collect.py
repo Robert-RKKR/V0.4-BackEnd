@@ -16,6 +16,9 @@ from ..models.device_model import Device
 # Logger import:
 from logger.logger import Logger
 
+# Data collection Import:
+from ..connection.data_collection.data_ssh_collection import DataSSHCollectionManager
+
 # Logger class initiation:
 ssh_logger = Logger('single_device_ssh_collect')
 https_logger = Logger('single_device_https_collect')
@@ -40,9 +43,12 @@ def single_device_ssh_collect(self, device_pk: int) -> bool:
             # Log starting of device data collection:
             ssh_logger.error(f'Starting of device {device.hostname}, data collection', device)
 
-            # Collect data from device:
-            ssh_connection = NetCon(device)
-            ssh_connection.send_command('show interfaces')
+            # Collect data from device using Data Collection Manager class:
+            data_collection = DataSSHCollectionManager(device)
+
+            # # Collect data from device:
+            # ssh_connection = NetCon(device)
+            # output = ssh_connection.send_command('show interfaces')
 
         else: # If device is not avaliable log error:
 
@@ -50,7 +56,7 @@ def single_device_ssh_collect(self, device_pk: int) -> bool:
             ssh_logger.error(f'Device with ID {device_pk}, is not avaliable (Error 404).', device)
 
     else: # If device variable is not a intiger, raise type error:
-        raise TypeError('device variable can only be a intiger.')
+        raise TypeError('Device PK variable can only be a intiger.')
 
     # Return single device collect status:
     return status
@@ -80,7 +86,7 @@ def single_device_https_collect(self, device_pk: int) -> bool:
             ssh_logger.error(f'Device with ID {device_pk}, is not avaliable (Error 404).', device)
 
     else: # If device variable is not a intiger, raise type error:
-        raise TypeError('device variable can only be a intiger.')
+        raise TypeError('Device PK variable can only be a intiger.')
 
     # Return single device collect status:
     return status

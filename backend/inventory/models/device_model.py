@@ -1,4 +1,5 @@
 # Django Import:
+from unicodedata import name
 from django.db import models
 
 # Validators Import:
@@ -125,6 +126,7 @@ class DeviceData(models.Model):
 
     # Creation data:
     created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     # Show version output:
     version = models.CharField(max_length=64, blank=True, null=True)
@@ -139,4 +141,48 @@ class DeviceData(models.Model):
 
     # Model representation:
     def __str__(self) -> str:
-        return f"{self.pk}: device({self.device})"
+        return f"DeviceData({self.pk}: device({self.device}))"
+
+
+class DeviceInterface(models.Model):
+
+    # Corelation witch device model:
+    device = models.OneToOneField(Device, on_delete=models.CASCADE)
+
+    # Creation data:
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    # Show interface status output:
+    port = models.CharField(max_length=64, blank=True, null=True)
+    name = models.CharField(max_length=64, blank=True, null=True)
+    status = models.CharField(max_length=64, blank=True, null=True)
+    vlan = models.CharField(max_length=64, blank=True, null=True)
+    duplex = models.CharField(max_length=64, blank=True, null=True)
+    type = models.CharField(max_length=64, blank=True, null=True)
+
+    # Model representation:
+    def __str__(self) -> str:
+        return f"Interface({self.name}: device({self.device}))"
+
+
+class DeviceRawData(models.Model):
+
+    # Corelation witch device model:
+    device = models.ForeignKey(Device, on_delete=models.CASCADE)
+
+    # Creation data:
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    # Command raw data:
+    command_name = models.CharField(max_length=64)
+    command_data = models.TextField()
+
+    # Model representation:
+    def __str__(self) -> str:
+        return f"DeviceRawData({self.pk}: device({self.device}))"
+
+    class Meta:
+        unique_together = [['device', 'command_name']]
+
