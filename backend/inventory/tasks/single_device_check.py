@@ -16,7 +16,7 @@ from ..models.device_model import Device
 from logger.logger import Logger
 
 # Logger class initiation:
-logger = Logger('single_device_check')
+logger = Logger('Single device check')
 
 @shared_task(bind=True, track_started=True, name='Check device status')
 def single_device_check(self, device_pk: int) -> bool:

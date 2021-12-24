@@ -6,10 +6,6 @@ from django.shortcuts import get_object_or_404
 from celery import shared_task
 from autocli.celery import app
 
-# Application Import:
-from ..connection.netcon import NetCon
-from ..connection.restcon import RestCon
-
 # Model Import:
 from ..models.device_model import Device
 
@@ -20,8 +16,8 @@ from logger.logger import Logger
 from ..connection.data_collection.data_ssh_collection import DataSSHCollectionManager
 
 # Logger class initiation:
-ssh_logger = Logger('single_device_ssh_collect')
-https_logger = Logger('single_device_https_collect')
+ssh_logger = Logger('Single device SSH collect')
+https_logger = Logger('Single device HTTPS collect')
 
 @shared_task(bind=True, track_started=True, name='Collect device data (SSH)')
 def single_device_ssh_collect(self, device_pk: int) -> bool:
@@ -45,10 +41,7 @@ def single_device_ssh_collect(self, device_pk: int) -> bool:
 
             # Collect data from device using Data Collection Manager class:
             data_collection = DataSSHCollectionManager(device)
-
-            # # Collect data from device:
-            # ssh_connection = NetCon(device)
-            # output = ssh_connection.send_command('show interfaces')
+            return data_collection.collect()
 
         else: # If device is not avaliable log error:
 

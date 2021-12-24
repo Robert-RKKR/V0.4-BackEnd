@@ -92,7 +92,7 @@ class NetCon:
                 })
                 device_type = check_device_type.autodetect()
                 
-                # Change device type name to intiger:
+                # Change device type name to device ID:
                 if device_type == 'cisco_ios':
                     self.device.device_type = 1
                 elif device_type == 'cisco_xr':
@@ -127,6 +127,9 @@ class NetCon:
         except SSHException as error:
             NetCon.logger.error(error, self.device, True)
             self.status = False # Change connection status to False.
+        except ssh_exception.SSHException as error:
+            NetCon.logger.error(error, self.device, True)
+            self.status = False # Change connection status to False.
 
     def __ssh_connect(self):
         # Connect to device:
@@ -155,7 +158,7 @@ class NetCon:
 
         # Check connection status:
         if self.status is False:
-            NetCon.logger.error('No connection available.', self.device, True)
+            # NetCon.logger.error('No connection available.', self.device, True)
             return None
 
         else:
@@ -194,7 +197,7 @@ class NetCon:
 
         # Check connection status:
         if self.status is False:
-            NetCon.logger.error('No connection available.', self.device, True)
+            # NetCon.logger.error('No connection available.', self.device, True)
             return None
 
         else:
