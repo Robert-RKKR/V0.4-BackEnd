@@ -1,2 +1,0 @@
-# AutoCli
-### Network Automation Application

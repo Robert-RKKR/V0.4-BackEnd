@@ -27,3 +27,6 @@ def test(request):
     logger.debug(f'New task nr: {id_task}', device)
 
     return render(request, 'inventory/test.html', data)
+
+
+# Test
