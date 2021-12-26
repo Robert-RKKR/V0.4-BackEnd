@@ -7,7 +7,7 @@ from .views.device_view import *
 from .views.color_view import *
 
 urlpatterns = [
-    path('test', test, name='test'),
+    path('test/<int:pk>', test, name='test'),
 
     path('device', DeviceView.as_view(), name='device'),
     path('device/<int:pk>', DeviceIdView.as_view(), name='device_id'),

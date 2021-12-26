@@ -181,7 +181,7 @@ class DeviceRawData(models.Model):
 
     # Model representation:
     def __str__(self) -> str:
-        return f"DeviceRawData({self.pk}: device({self.device}))"
+        return f"DeviceRawData({self.pk}: device({self.device}), '{self.command_name}')"
 
     class Meta:
         unique_together = [['device', 'command_name']]

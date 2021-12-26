@@ -36,8 +36,11 @@ def single_device_ssh_collect(self, device_pk: int) -> bool:
         # Check if device is instance of Device class:
         if isinstance(device, Device):
 
+            ######### TEST LOG
+            ssh_logger.info(f'--------------------------------------------------------------------------', device)
+
             # Log starting of device data collection:
-            ssh_logger.error(f'Starting of device {device.hostname}, data collection', device)
+            ssh_logger.info(f'Starting of device {device.name} ({device.hostname}), data collection', device)
 
             # Collect data from device using Data Collection Manager class:
             data_collection = DataSSHCollectionManager(device)

@@ -17,14 +17,54 @@ TEMPLATE_PATH = 'inventory/connection/data_collection/ssh_templates/'
 commands_database = {
     'cisco_ios': [
         {
-            'command_name': 'show version',
-            'command_template_name': 'cisco_ios_show_version.textfsm',
-            'model': DeviceData,
+            'command_name': 'show interfaces description',
+            'command_template_name': 'cisco_ios_show_interfaces_description.textfsm',
+            'model': DeviceInterface,
         },
         {
             'command_name': 'show interfaces status',
             'command_template_name': 'cisco_ios_show_interfaces_status.textfsm',
             'model': DeviceInterface,
+        },
+        {
+            'command_name': 'show interfaces switchport',
+            'command_template_name': 'cisco_ios_show_interfaces_switchport.textfsm',
+            'model': DeviceInterface,
+        },
+        {
+            'command_name': 'show interfaces',
+            'command_template_name': 'cisco_ios_show_interfaces.textfsm',
+            'model': DeviceInterface,
+        },
+        {
+            'command_name': 'show vrf',
+            'command_template_name': 'xxxx.textfsm',
+            'model': DeviceData,
+        },
+        {
+            'command_name': 'show vrf interface',
+            'command_template_name': 'xxxx.textfsm',
+            'model': DeviceData,
+        },
+        {
+            'command_name': 'show cdp neighbors detail',
+            'command_template_name': 'xxxx.textfsm',
+            'model': DeviceData,
+        },
+        {
+            'command_name': 'show running-config',
+            'command_template_name': 'xxxx.textfsm',
+            'model': DeviceData,
+        },
+        {
+            'command_name': 'show ip dhcp pool',
+            'command_template_name': 'xxxx.textfsm',
+            'model': DeviceData,
+        },
+        {
+            'command_name': 'show version',
+            'command_template_name': 'xxxx.textfsm',
+            'model': DeviceData,
         },
     ],
     'cisco_nxos': [
@@ -91,7 +131,10 @@ class DataSSHCollectionManager:
         device_type = None
 
         # Change device ID type to device type name:
-        if self.device.device_type == 1:
+        if self.device.device_type == 0:
+            # Check if device is supported: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! check device type if 0
+            device_type = 'unsupported'
+        elif self.device.device_type == 1:
             # Check if device is supported:
             device_type = check('cisco_ios')
         elif self.device.device_type == 2:
@@ -99,7 +142,7 @@ class DataSSHCollectionManager:
             device_type = check('cisco_xr')
         elif self.device.device_type == 3:
             # Check if device is supported:
-            device_type = check('cisco_xe')
+            device_type = check('cisco_ios')
         elif self.device.device_type == 4:
             # Check if device is supported:
             device_type = check('cisco_nxos')
@@ -116,11 +159,12 @@ class DataSSHCollectionManager:
             if commands_device_type == device_type:
                 commands_list = commands_database[commands_device_type]
 
-                # Clear current Device Raw Data:
-                try:
-                    DeviceRawData.objects.filter(device=self.device).delete()
-                except:
-                    pass
+                # # Clear current Device Raw Data:
+                # try:
+                #     DeviceRawData.objects.filter(device=self.device).delete()
+                #     ######################### NO DELETE, UPDATE #########################
+                # except:
+                #     pass
 
                 # Iterate thru command list:
                 for command_data in commands_list:
@@ -135,20 +179,29 @@ class DataSSHCollectionManager:
                     self._parse_data(collected_data)
 
     def _collect_data(self, command_data):
-        """ Xxx """
+        """ Collect data from device using information taken from command_list. """
         ssh_connection = NetCon(self.device)
         output = ssh_connection.send_command(command_data['command_name'])
         return output
 
     def _save_raw_data(self, collected_data, command_data):
-        """ Xxx """
-        new_raw_data = DeviceRawData(
-            device=self.device,
-            command_name=command_data['command_name'],
-            command_data=collected_data,
-        )
-        new_raw_data.save()
-        return new_raw_data
+        """ Edit existing raw data or create new one. """
+
+        # Try to update Raw Data object if exist or create if not exist yet:
+        try:
+            raw_data_object = DeviceRawData.objects.get(device=self.device, command_name=command_data['command_name'])
+            raw_data_object.command_data = collected_data
+            raw_data_object.save()
+        except:
+            raw_data_object = DeviceRawData(
+                device=self.device,
+                command_name=command_data['command_name'],
+                command_data=collected_data,
+            )
+            raw_data_object.save()          
+
+        # Return raw data object:
+        return raw_data_object
 
     def _parse_data(self, collected_data):
         """ Xxx """

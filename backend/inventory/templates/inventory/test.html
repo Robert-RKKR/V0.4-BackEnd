@@ -1,1 +1,13 @@
 <p>{{ output }}</p>
+
+{% for row in log %}
+    {% if row.severity == 4 %}
+        <li style="color:red;">{{ row.id }} --- {{ row.message }}</li>
+    {% elif row.severity == 3 %}
+        <li style="color:orange;">{{ row.id }} --- {{ row.message }}</li>
+    {% elif row.severity == 2 %}
+        <li style="color:blue;">{{ row.id }} --- {{ row.message }}</li>
+    {% elif row.severity == 1 %}
+        <li style="color:green;">{{ row.id }} --- {{ row.message }}</li>
+    {% endif %}
+{% endfor %}
