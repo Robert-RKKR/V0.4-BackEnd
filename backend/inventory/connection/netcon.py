@@ -72,64 +72,78 @@ class NetCon:
             self.username = 'admin'
             self.password = 'password'
 
-        # Try connect to device:
-        try:
-            # Log start of SSH connection:
-            NetCon.logger.debug('SSH connection has been started.', self.device, True)
+        # The purpose of the repeat loop is to repeat the call if the previous call failed:
+        for _ in range(1):
+            
+            # Try connect to device:
+            try:
+                # Log start of SSH connection:
+                NetCon.logger.debug('SSH connection has been started.', self.device, True)
 
-            # Check if device type is not a autodetect type:
-            if self.device.device_type != 0:
-                # Connect to device:
-                self.__ssh_connect()
-            else:
-                # Connect to device to check device type:
-                check_device_type = SSHDetect(**{
-                    'device_type': 'autodetect',
-                    'host': device.hostname,
-                    'username': self.username,
-                    'password': self.password,
-                    'port': device.ssh_port,
-                })
-                device_type = check_device_type.autodetect()
-                
-                # Change device type name to device ID:
-                if device_type == 'cisco_ios':
-                    self.device.device_type = 1
-                elif device_type == 'cisco_xr':
-                    self.device.device_type = 2
-                elif device_type == 'cisco_xe':
-                    self.device.device_type = 3
-                elif device_type == 'cisco_nxos':
-                    self.device.device_type = 4
+                # Check if device type is not a autodetect type:
+                if self.device.device_type != 0:
+                    # Connect to device:
+                    self.__ssh_connect()
                 else:
-                    self.device.device_type = 0
-                
-                # Update device object:
-                self.device.save()
+                    # Connect to device to check device type:
+                    check_device_type = SSHDetect(**{
+                        'device_type': 'autodetect',
+                        'host': device.hostname,
+                        'username': self.username,
+                        'password': self.password,
+                        'port': device.ssh_port,
+                    })
+                    device_type = check_device_type.autodetect()
+                    
+                    # Change device type name to device ID:
+                    if device_type == 'cisco_ios':
+                        self.device.device_type = 1
+                    elif device_type == 'cisco_xr':
+                        self.device.device_type = 2
+                    elif device_type == 'cisco_xe':
+                        self.device.device_type = 3
+                    elif device_type == 'cisco_nxos':
+                        self.device.device_type = 4
+                    else:
+                        self.device.device_type = 0
+                    
+                    # Update device object:
+                    self.device.save()
 
-                # Connect to device:
-                self.__ssh_connect()
+                    # Connect to device:
+                    self.__ssh_connect()
 
-            # Log end of SSH connection
-            NetCon.logger.info('SSH connection has been established.', self.device, True)
-            self.status = True # Change connection status to True:
+                # Log end of SSH connection
+                NetCon.logger.info('SSH connection has been established.', self.device, True)
+                self.status = True # Change connection status to True:
 
-        # Handel exceptions:
-        except AuthenticationException as error:
-            NetCon.logger.error(error, self.device, True)
-            self.status = False # Change connection status to False.
-        except NetMikoTimeoutException as error:
-            NetCon.logger.error(error, self.device, True)
-            self.status = False # Change connection status to False.
-        except ssh_exception.SSHException as error:
-            NetCon.logger.error(error, self.device, True)
-            self.status = False # Change connection status to False.
-        except SSHException as error:
-            NetCon.logger.error(error, self.device, True)
-            self.status = False # Change connection status to False.
-        except ssh_exception.SSHException as error:
-            NetCon.logger.error(error, self.device, True)
-            self.status = False # Change connection status to False.
+                # Break connection loop in success:
+                break
+
+            # Handel exceptions:
+            except AuthenticationException as error:
+                NetCon.logger.error(error, self.device, True)
+                # Change connection status to False:
+                self.status = False
+                # Break connection loop in case of authentication error: 
+                break
+            except NetMikoTimeoutException as error:
+                NetCon.logger.error(error, self.device, True)
+                # Change connection status to False:
+                self.status = False
+                # # Break connection loop in case of timeout error: 
+                # break
+            except ssh_exception.SSHException as error:
+                NetCon.logger.error(error, self.device, True)
+                # Change connection status to False:
+                self.status = False
+            except SSHException as error:
+                NetCon.logger.error(error, self.device, True)
+                # Change connection status to False:
+                self.status = False
+
+        # Wait 1 second i case of connection failure, and reppeat them:
+        time.sleep(1)
 
     def __ssh_connect(self):
         # Connect to device:

@@ -1,24 +1,24 @@
-Value version (.+?)
-Value rommon (\S+)
-Value hostname (\S+)
-Value uptime (.+)
-Value reload_reason (.+?)
-Value running_image (\S+)
-Value List hardware_list (\S+|\S+\d\S+)
-Value List serial_list (\S+)
-Value config_register (\S+)
-Value List mac_list ([0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5})
+Value VERSION (.+?)
+Value ROMMON (\S+)
+Value HOSTNAME (\S+)
+Value UPTIME (.+)
+Value RELOAD_REASON (.+?)
+Value RUNNING_IMAGE (\S+)
+Value List HARDWARE (\S+|\S+\d\S+)
+Value List SERIAL (\S+)
+Value CONFIG_REGISTER (\S+)
+Value List MAC ([0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5})
 
 Start
-  ^.*Software\s.+\),\sVersion\s${version},*\s+RELEASE.*
-  ^ROM:\s+${rommon}
-  ^\s*${hostname}\s+uptime\s+is\s+${uptime}
-  ^[sS]ystem\s+image\s+file\s+is\s+"(.*?):${running_image}"
-  ^(?:[lL]ast\s+reload\s+reason:|System\s+returned\s+to\s+ROM\s+by)\s+${reload_reason}\s*$$
-  ^[Pp]rocessor\s+board\s+ID\s+${serial_list}
-  ^[Cc]isco\s+${hardware_list}\s+\(.+\).+
-  ^[Cc]onfiguration\s+register\s+is\s+${config_register}
-  ^Base\s+[Ee]thernet\s+MAC\s+[Aa]ddress\s+:\s+${mac_list}
+  ^.*Software\s.+\),\sVersion\s${VERSION},*\s+RELEASE.*
+  ^ROM:\s+${ROMMON}
+  ^\s*${HOSTNAME}\s+uptime\s+is\s+${UPTIME}
+  ^[sS]ystem\s+image\s+file\s+is\s+"(.*?):${RUNNING_IMAGE}"
+  ^(?:[lL]ast\s+reload\s+reason:|System\s+returned\s+to\s+ROM\s+by)\s+${RELOAD_REASON}\s*$$
+  ^[Pp]rocessor\s+board\s+ID\s+${SERIAL}
+  ^[Cc]isco\s+${HARDWARE}\s+\(.+\).+
+  ^[Cc]onfiguration\s+register\s+is\s+${CONFIG_REGISTER}
+  ^Base\s+[Ee]thernet\s+MAC\s+[Aa]ddress\s+:\s+${MAC}
   ^Switch\s+Port -> Stack
   # Capture time-stamp if vty line has command time-stamping turned on
   ^Load\s+for\s+
@@ -26,7 +26,7 @@ Start
 
 
 Stack
-  ^[Ss]ystem\s+[Ss]erial\s+[Nn]umber\s+:\s+${serial_list}
-  ^[Mm]odel\s+[Nn]umber\s+:\s+${hardware_list}\s*
-  ^[Cc]onfiguration\s+register\s+is\s+${config_register}
-  ^Base [Ee]thernet MAC [Aa]ddress\s+:\s+${mac_list}
+  ^[Ss]ystem\s+[Ss]erial\s+[Nn]umber\s+:\s+${SERIAL}
+  ^[Mm]odel\s+[Nn]umber\s+:\s+${HARDWARE}\s*
+  ^[Cc]onfiguration\s+register\s+is\s+${CONFIG_REGISTER}
+  ^Base [Ee]thernet MAC [Aa]ddress\s+:\s+${MAC}

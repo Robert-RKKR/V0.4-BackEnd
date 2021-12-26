@@ -147,7 +147,7 @@ class DeviceData(models.Model):
 class DeviceInterface(models.Model):
 
     # Corelation witch device model:
-    device = models.OneToOneField(Device, on_delete=models.CASCADE)
+    device = models.ForeignKey(Device, on_delete=models.CASCADE)
 
     # Creation data:
     created = models.DateTimeField(auto_now_add=True)
@@ -165,6 +165,9 @@ class DeviceInterface(models.Model):
     def __str__(self) -> str:
         return f"Interface({self.name}: device({self.device}))"
 
+    class Meta:
+        unique_together = [['device', 'port']]
+
 
 class DeviceRawData(models.Model):
 
@@ -177,7 +180,7 @@ class DeviceRawData(models.Model):
 
     # Command raw data:
     command_name = models.CharField(max_length=64)
-    command_data = models.TextField()
+    command_data = models.TextField(null=True, blank=True)
 
     # Model representation:
     def __str__(self) -> str:

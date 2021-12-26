@@ -1,3 +1,6 @@
+# Python Import:
+import textfsm
+
 # Model Import:
 from ...models.device_model import *
 
@@ -18,52 +21,52 @@ commands_database = {
     'cisco_ios': [
         {
             'command_name': 'show interfaces description',
-            'command_template_name': 'cisco_ios_show_interfaces_description.textfsm',
+            'command_template_name': 'cisco_ios/cisco_ios_show_interfaces_description.textfsm',
             'model': DeviceInterface,
         },
         {
             'command_name': 'show interfaces status',
-            'command_template_name': 'cisco_ios_show_interfaces_status.textfsm',
+            'command_template_name': 'cisco_ios/cisco_ios_show_interfaces_status.textfsm',
             'model': DeviceInterface,
         },
         {
             'command_name': 'show interfaces switchport',
-            'command_template_name': 'cisco_ios_show_interfaces_switchport.textfsm',
+            'command_template_name': 'cisco_ios/cisco_ios_show_interfaces_switchport.textfsm',
             'model': DeviceInterface,
         },
         {
             'command_name': 'show interfaces',
-            'command_template_name': 'cisco_ios_show_interfaces.textfsm',
+            'command_template_name': 'cisco_ios/cisco_ios_show_interfaces.textfsm',
             'model': DeviceInterface,
         },
-        {
-            'command_name': 'show vrf',
-            'command_template_name': 'xxxx.textfsm',
-            'model': DeviceData,
-        },
-        {
-            'command_name': 'show vrf interface',
-            'command_template_name': 'xxxx.textfsm',
-            'model': DeviceData,
-        },
-        {
-            'command_name': 'show cdp neighbors detail',
-            'command_template_name': 'xxxx.textfsm',
-            'model': DeviceData,
-        },
-        {
-            'command_name': 'show running-config',
-            'command_template_name': 'xxxx.textfsm',
-            'model': DeviceData,
-        },
-        {
-            'command_name': 'show ip dhcp pool',
-            'command_template_name': 'xxxx.textfsm',
-            'model': DeviceData,
-        },
+        # {
+        #     'command_name': 'show vrf',
+        #     'command_template_name': 'cisco_ios/xxxx.textfsm',
+        #     'model': DeviceData,
+        # },
+        # {
+        #     'command_name': 'show vrf interface',
+        #     'command_template_name': 'cisco_ios/xxxx.textfsm',
+        #     'model': DeviceData,
+        # },
+        # {
+        #     'command_name': 'show cdp neighbors detail',
+        #     'command_template_name': 'cisco_ios/xxxx.textfsm',
+        #     'model': DeviceData,
+        # },
+        # {
+        #     'command_name': 'show running-config',
+        #     'command_template_name': 'cisco_ios/xxxx.textfsm',
+        #     'model': DeviceData,
+        # },
+        # {
+        #     'command_name': 'show ip dhcp pool',
+        #     'command_template_name': 'cisco_ios/xxxx.textfsm',
+        #     'model': DeviceData,
+        # },
         {
             'command_name': 'show version',
-            'command_template_name': 'xxxx.textfsm',
+            'command_template_name': 'cisco_ios/cisco_ios_show_version.textfsm',
             'model': DeviceData,
         },
     ],
@@ -132,19 +135,16 @@ class DataSSHCollectionManager:
 
         # Change device ID type to device type name:
         if self.device.device_type == 0:
-            # Check if device is supported: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! check device type if 0
-            device_type = 'unsupported'
-        elif self.device.device_type == 1:
-            # Check if device is supported:
+            # Check device type, by connecting to them:
+            NetCon(self.device)
+ 
+        if self.device.device_type == 1:
             device_type = check('cisco_ios')
         elif self.device.device_type == 2:
-            # Check if device is supported:
             device_type = check('cisco_xr')
         elif self.device.device_type == 3:
-            # Check if device is supported:
             device_type = check('cisco_ios')
         elif self.device.device_type == 4:
-            # Check if device is supported:
             device_type = check('cisco_nxos')
         else:
             device_type = 'unsupported'
@@ -153,34 +153,29 @@ class DataSSHCollectionManager:
         return device_type
 
     def _manage_data_collection(self, device_type):
-        """ Xxx """
+        """ Manage the data collection process. """
         # Collect commands list related to current device type:
         for commands_device_type in commands_database:
             if commands_device_type == device_type:
                 commands_list = commands_database[commands_device_type]
 
-                # # Clear current Device Raw Data:
-                # try:
-                #     DeviceRawData.objects.filter(device=self.device).delete()
-                #     ######################### NO DELETE, UPDATE #########################
-                # except:
-                #     pass
+                # Connect to device using SSH protocol:
+                ssh_connection = NetCon(self.device)
 
                 # Iterate thru command list:
                 for command_data in commands_list:
 
                     # Collect data based in provided command:
-                    collected_data = self._collect_data(command_data)
+                    collected_data = self._collect_data(command_data, ssh_connection)
                     
                     # Save raw data to database:
                     self._save_raw_data(collected_data, command_data)
 
                     # Parse collected data using collected data and template:
-                    self._parse_data(collected_data)
+                    self._parse_data(collected_data, command_data)
 
-    def _collect_data(self, command_data):
+    def _collect_data(self, command_data, ssh_connection):
         """ Collect data from device using information taken from command_list. """
-        ssh_connection = NetCon(self.device)
         output = ssh_connection.send_command(command_data['command_name'])
         return output
 
@@ -203,6 +198,18 @@ class DataSSHCollectionManager:
         # Return raw data object:
         return raw_data_object
 
-    def _parse_data(self, collected_data):
+    def _parse_data(self, collected_data, command_data):
         """ Xxx """
-        pass
+        # 
+        output = []
+        try:
+            with open(TEMPLATE_PATH + command_data['command_template_name']) as template:
+                fsm = textfsm.TextFSM(template)
+                fsmResult = fsm.ParseText(collected_data)
+
+            for value in fsmResult:
+                output.append(dict(zip(fsm.header, value)))
+        except:
+            pass
+        print(output)
+        
