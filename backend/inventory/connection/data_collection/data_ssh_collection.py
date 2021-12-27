@@ -235,8 +235,6 @@ class DataSSHCollectionManager:
                 if value in object_values_string:
                     fsm_value = fsm_result[0].get(value.upper(), None)
                     if fsm_value is not None:
-                        print('---------->', fsm_result[0].get(value.upper(), None))
-                        print('---------->', value.upper())
                         object_data.__dict__[value] = fsm_value
 
             # Save object:
