@@ -24,16 +24,16 @@ commands_database = {
             'command_template_name': 'cisco_ios/cisco_ios_show_interfaces_description.textfsm',
             'model': DeviceInterface,
         },
-        {
-            'command_name': 'show interfaces status',
-            'command_template_name': 'cisco_ios/cisco_ios_show_interfaces_status.textfsm',
-            'model': DeviceInterface,
-        },
-        {
-            'command_name': 'show interfaces switchport',
-            'command_template_name': 'cisco_ios/cisco_ios_show_interfaces_switchport.textfsm',
-            'model': DeviceInterface,
-        },
+        # {
+        #     'command_name': 'show interfaces status',
+        #     'command_template_name': 'cisco_ios/cisco_ios_show_interfaces_status.textfsm',
+        #     'model': DeviceInterface,
+        # },
+        # {
+        #     'command_name': 'show interfaces switchport',
+        #     'command_template_name': 'cisco_ios/cisco_ios_show_interfaces_switchport.textfsm',
+        #     'model': DeviceInterface,
+        # },
         {
             'command_name': 'show interfaces',
             'command_template_name': 'cisco_ios/cisco_ios_show_interfaces.textfsm',
@@ -200,16 +200,49 @@ class DataSSHCollectionManager:
 
     def _parse_data(self, collected_data, command_data):
         """ Xxx """
-        # 
-        output = []
+
+        # TextFSM result list, that contains one or many dicts:
+        fsm_result = []
+
+        # Try to parse collected data into Text FSM result:
         try:
+            # Pars collected data:
             with open(TEMPLATE_PATH + command_data['command_template_name']) as template:
                 fsm = textfsm.TextFSM(template)
-                fsmResult = fsm.ParseText(collected_data)
+                result = fsm.ParseText(collected_data)
 
-            for value in fsmResult:
-                output.append(dict(zip(fsm.header, value)))
+            # Create one or many dict from Text FSM result:
+            for value in result:
+                fsm_result.append(dict(zip(fsm.header, value)))
         except:
             pass
-        print(output)
+
+        # Update object if exist or create newone:
+        object_values = command_data['model'].__dict__.keys()
+        object_values_string = command_data['model'].__doc__
+        # Check if Test FSM outputs contains one or many dicts inside:
+        if len(fsm_result) <= 1:
+
+            # Try to collect object if exist:
+            try:
+                object_data = command_data['model'].objects.get(device=self.device)
+            except:
+                object_data = command_data['model'](device=self.device)
+                object_data.save()
+
+            # Iterate thru object values list to update data based on Text FSM single dict output:
+            for value in object_values:
+                if value in object_values_string:
+                    fsm_value = fsm_result[0].get(value.upper(), None)
+                    if fsm_value is not None:
+                        print('---------->', fsm_result[0].get(value.upper(), None))
+                        print('---------->', value.upper())
+                        object_data.__dict__[value] = fsm_value
+
+            # Save object:
+            object_data.save()
+
+        else:
+
+            pass   
         
