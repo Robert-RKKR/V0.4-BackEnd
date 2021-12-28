@@ -1,4 +1,4 @@
-Value Required INTERFACE (\S+)
+Value Required PORT (\S+)
 Value LINK_STATUS (.+?)
 Value PROTOCOL_STATUS (.+?)
 Value HARDWARE_TYPE ([\w ]+)
@@ -28,7 +28,7 @@ Value OUTPUT_ERRORS (\d+)
 
 Start
   ^\S+\s+is\s+.+?,\s+line\s+protocol.*$$ -> Continue.Record
-  ^${INTERFACE}\s+is\s+${LINK_STATUS},\s+line\s+protocol\s+is\s+${PROTOCOL_STATUS}\s*$$
+  ^${PORT}\s+is\s+${LINK_STATUS},\s+line\s+protocol\s+is\s+${PROTOCOL_STATUS}\s*$$
   ^\s+Hardware\s+is\s+${HARDWARE_TYPE} -> Continue
   ^.+address\s+is\s+${ADDRESS}\s+\(bia\s+${BIA}\)\s*$$
   ^\s+Description:\s+${DESCRIPTION}\s*$$

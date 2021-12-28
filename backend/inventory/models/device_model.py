@@ -146,24 +146,52 @@ class DeviceData(models.Model):
 
 class DeviceInterface(models.Model):
 
-    # Corelation witch device model:
+    # Corelation witch device model and unique:
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
+    port = models.CharField(max_length=64, blank=True, null=True)
 
     # Creation data:
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    # Show interface status output:
-    port = models.CharField(max_length=64, blank=True, null=True)
-    name = models.CharField(max_length=64, blank=True, null=True)
-    status = models.CharField(max_length=64, blank=True, null=True)
-    vlan = models.CharField(max_length=64, blank=True, null=True)
+    # # Show interfaces status output:
+    # name = models.CharField(max_length=64, blank=True, null=True)
+    # status = models.CharField(max_length=64, blank=True, null=True)
+    # vlan = models.CharField(max_length=64, blank=True, null=True)
+    # type = models.CharField(max_length=64, blank=True, null=True)
+
+    # Show interfaces output:
+    link_status = models.CharField(max_length=64, blank=True, null=True)
+    protocol_status = models.CharField(max_length=64, blank=True, null=True)
+    hardware_type = models.CharField(max_length=64, blank=True, null=True)
+    address = models.CharField(max_length=64, blank=True, null=True)
+    bia = models.CharField(max_length=64, blank=True, null=True)
+    description = models.CharField(max_length=64, blank=True, null=True)
+    ip_address = models.CharField(max_length=64, blank=True, null=True)
+    mtu = models.CharField(max_length=64, blank=True, null=True)
     duplex = models.CharField(max_length=64, blank=True, null=True)
-    type = models.CharField(max_length=64, blank=True, null=True)
+    speed = models.CharField(max_length=64, blank=True, null=True)
+    media_type = models.CharField(max_length=64, blank=True, null=True)
+    bandwidth = models.CharField(max_length=64, blank=True, null=True)
+    delay = models.CharField(max_length=64, blank=True, null=True)
+    encapsulation = models.CharField(max_length=64, blank=True, null=True)
+    last_input = models.CharField(max_length=64, blank=True, null=True)
+    last_output = models.CharField(max_length=64, blank=True, null=True)
+    last_output_hang = models.CharField(max_length=64, blank=True, null=True)
+    queue_strategy = models.CharField(max_length=64, blank=True, null=True)
+    input_rate = models.CharField(max_length=64, blank=True, null=True)
+    output_rate = models.CharField(max_length=64, blank=True, null=True)
+    input_packets = models.CharField(max_length=64, blank=True, null=True)
+    output_packets = models.CharField(max_length=64, blank=True, null=True)
+    input_errors = models.CharField(max_length=64, blank=True, null=True)
+    crc = models.CharField(max_length=64, blank=True, null=True)
+    abort = models.CharField(max_length=64, blank=True, null=True)
+    output_errors = models.CharField(max_length=64, blank=True, null=True)
+
 
     # Model representation:
     def __str__(self) -> str:
-        return f"Interface({self.name}: device({self.device}))"
+        return f"{self.pk}: {self.port}: device({self.device})"
 
     class Meta:
         unique_together = [['device', 'port']]

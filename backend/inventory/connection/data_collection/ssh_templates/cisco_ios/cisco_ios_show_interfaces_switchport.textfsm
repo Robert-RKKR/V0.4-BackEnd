@@ -1,4 +1,4 @@
-Value Required INTERFACE (\S+)
+Value Required PORT (\S+)
 Value SWITCHPORT (.+?)
 Value SWITCHPORT_MONITOR (.+?)
 Value SWITCHPORT_NEGOTIATION (.+?)
@@ -11,7 +11,7 @@ Value List TRUNKING_VLANS (\S+?)
 
 Start
   ^Name: -> Continue.Record
-  ^Name:\s+${INTERFACE}
+  ^Name:\s+${PORT}
   ^\s*Switchport:\s+${SWITCHPORT}$$
   ^\s*Switchport\s+Monitor:\s+${SWITCHPORT_MONITOR}$$
   ^\s*Operational\s+Mode:\s+${MODE}$$

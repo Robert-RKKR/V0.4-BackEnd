@@ -1,4 +1,4 @@
-Value PORT (\S+)
+Value Required PORT (\S+)
 Value NAME (.+?)
 Value STATUS (err-disabled|disabled|connected|notconnect|inactive|up|down)
 Value VLAN (\S+)

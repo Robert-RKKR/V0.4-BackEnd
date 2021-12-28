@@ -20,24 +20,10 @@ TEMPLATE_PATH = 'inventory/connection/data_collection/ssh_templates/'
 commands_database = {
     'cisco_ios': [
         {
-            'command_name': 'show interfaces description',
-            'command_template_name': 'cisco_ios/cisco_ios_show_interfaces_description.textfsm',
-            'model': DeviceInterface,
-        },
-        # {
-        #     'command_name': 'show interfaces status',
-        #     'command_template_name': 'cisco_ios/cisco_ios_show_interfaces_status.textfsm',
-        #     'model': DeviceInterface,
-        # },
-        # {
-        #     'command_name': 'show interfaces switchport',
-        #     'command_template_name': 'cisco_ios/cisco_ios_show_interfaces_switchport.textfsm',
-        #     'model': DeviceInterface,
-        # },
-        {
             'command_name': 'show interfaces',
             'command_template_name': 'cisco_ios/cisco_ios_show_interfaces.textfsm',
             'model': DeviceInterface,
+            'required': 'port',
         },
         # {
         #     'command_name': 'show vrf',
@@ -56,11 +42,6 @@ commands_database = {
         # },
         # {
         #     'command_name': 'show running-config',
-        #     'command_template_name': 'cisco_ios/xxxx.textfsm',
-        #     'model': DeviceData,
-        # },
-        # {
-        #     'command_name': 'show ip dhcp pool',
         #     'command_template_name': 'cisco_ios/xxxx.textfsm',
         #     'model': DeviceData,
         # },
@@ -241,6 +222,26 @@ class DataSSHCollectionManager:
             object_data.save()
 
         else:
+            
+            for fsm_result_one in fsm_result:
 
-            pass   
-        
+                search_values = {
+                    'device': self.device,
+                    command_data['required']: fsm_result_one.get(command_data['required'].upper(), None),
+                }
+
+                try:
+                    object_data = command_data['model'].objects.get(**search_values)
+                except:
+                    object_data = command_data['model'](**search_values)
+                    object_data.save()
+
+                # Iterate thru object values list to update data based on Text FSM single dict output:
+                for value in object_values:
+                    if value in object_values_string:
+                        fsm_value = fsm_result_one.get(value.upper(), None)
+                        if fsm_value is not None:
+                            object_data.__dict__[value] = fsm_value
+
+                # Save object:
+                object_data.save()

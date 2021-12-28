@@ -1,4 +1,4 @@
-Value PORT (\S+)
+Value Required PORT (\S+)
 Value STATUS (up|down|deleted|admin\s+down)
 Value PROTOCOL (up|down)
 Value DESCRIP (\S.*?)
