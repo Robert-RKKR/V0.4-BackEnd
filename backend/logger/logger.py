@@ -99,11 +99,9 @@ class Logger():
     def __log(self, severity, message: str, model: object, connection: bool) -> Tuple:
         """ Create new log in Database """
 
-        # Define Model name:
-        model_name = None
-
         # Collect log data:
         log_data = {
+            'application': self.application,
             'severity': severity,
             'message': str(message),
             'connection': connection,
@@ -129,9 +127,14 @@ class Logger():
             # Define log:
             new_log = None
 
-            # Create nwe log:
-            new_log = LoggerData.objects.create(**log_data)
+            # Tyr to create a new log:
+            try:
+                # Create nwe log:
+                new_log = LoggerData.objects.create(**log_data)
+            except:
+                return False
 
+            # Return created log object:
             return (new_log)
 
         else:

@@ -36,15 +36,19 @@ def single_device_ssh_collect(self, device_pk: int) -> bool:
         # Check if device is instance of Device class:
         if isinstance(device, Device):
 
-            ######### TEST LOG
-            ssh_logger.info(f'--------------------------------------------------------------------------', device)
-
             # Log starting of device data collection:
             ssh_logger.info(f'Starting of device {device.name} ({device.hostname}), data collection', device)
 
             # Collect data from device using Data Collection Manager class:
             data_collection = DataSSHCollectionManager(device)
-            return data_collection.collect()
+            collect_output = data_collection.collect()
+
+            # Check data collection status:
+            if data_collection.status is False:
+                ssh_logger.error(f'SSH data collection process failed', device)
+
+            # Return:
+            return collect_output
 
         else: # If device is not avaliable log error:
 

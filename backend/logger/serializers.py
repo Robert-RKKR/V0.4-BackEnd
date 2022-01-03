@@ -12,6 +12,7 @@ class LoggerDataSerializer(serializers.ModelSerializer):
         depth = 1
         fields = [
             'id',
+            'application',
             'timestamp',
             'severity',
             'message',

@@ -18,6 +18,7 @@ class LoggerData(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     # Data:
+    application = models.CharField(max_length=128)
     severity = models.IntegerField(choices=SEVERITY)
     message = models.CharField(max_length=1024)
     connection = models.BooleanField(default=False)
@@ -39,3 +40,7 @@ class LoggerData(models.Model):
         Group, on_delete=models.CASCADE,
         null=True, blank=True
     )
+
+    # Model representation:
+    def __str__(self) -> str:
+        return f"{self.pk} - {self.severity} - {self.application} - {self.message}"

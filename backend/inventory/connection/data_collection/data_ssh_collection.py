@@ -96,6 +96,8 @@ class DataSSHCollectionManager:
             return False
         else:
             output = self._manage_data_collection(device_type)
+            if output is False:
+                return False
             return output
 
     def _system_version_check(self):
@@ -143,17 +145,26 @@ class DataSSHCollectionManager:
                 # Connect to device using SSH protocol:
                 ssh_connection = NetCon(self.device)
 
-                # Iterate thru command list:
-                for command_data in commands_list:
+                # Check if connection was established:
+                if ssh_connection.status is not False:
 
-                    # Collect data based in provided command:
-                    collected_data = self._collect_data(command_data, ssh_connection)
-                    
-                    # Save raw data to database:
-                    self._save_raw_data(collected_data, command_data)
+                    # Iterate thru command list:
+                    for command_data in commands_list:
 
-                    # Parse collected data using collected data and template:
-                    self._parse_data(collected_data, command_data)
+                        # Collect data based in provided command:
+                        collected_data = self._collect_data(command_data, ssh_connection)
+                        
+                        # Save raw data to database:
+                        self._save_raw_data(collected_data, command_data)
+
+                        # Parse collected data using collected data and template:
+                        self._parse_data(collected_data, command_data)
+
+                else:
+
+                    # Raport connection problem:
+                    self.status = False
+                    return False
 
     def _collect_data(self, command_data, ssh_connection):
         """ Collect data from device using information taken from command_list. """

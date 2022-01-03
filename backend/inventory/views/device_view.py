@@ -20,7 +20,8 @@ from ..models.device_model import Device
 class DeviceView(APIView, TenResultsPagination):
     """ Xxx """
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
         # Collect all objects from database:
@@ -44,7 +45,8 @@ class DeviceView(APIView, TenResultsPagination):
 class DeviceIdView(APIView):
     """ Xxx """
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, pk):
         return get_object_or_404(Device, pk=pk)
