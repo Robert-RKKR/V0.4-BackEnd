@@ -14,8 +14,11 @@ from ..validators import (
 # Application Import:
 from .administrator_manager_model import AdministratorManager
 
+# Base Model Import:
+from main.basemodel import BaseAutoCliModel
 
-class Administrator(AbstractBaseUser, PermissionsMixin):
+
+class Administrator(BaseAutoCliModel, AbstractBaseUser, PermissionsMixin):
 
     # Validators:
     username_validator = UsernameValueValidator()

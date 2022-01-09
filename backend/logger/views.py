@@ -1,19 +1,22 @@
-# Rest Django Import:
-from rest_framework import generics
-from rest_framework import permissions
-
 # Application Import:
 from .models import LoggerData
 
 # Serializes Import:
 from .serializers import LoggerDataSerializer
 
-# Pagination Import:
-from api.pagination import HundredResultsPagination
+# Generic objects Import:
+from api.generic_objects import GenericObjectsView
+from api.generic_objects import GenericObjectView
 
-# Create your views here.
-class LoggerDataAllAPI(generics.ListAPIView):
-    permission_classes = [permissions.AllowAny]
-    queryset = LoggerData.objects.all().order_by('-pk')
-    serializer_class = LoggerDataSerializer
-    pagination_class = HundredResultsPagination
+
+class LoggersView(GenericObjectsView):
+
+    queryset = LoggerData
+    serializer_all = LoggerDataSerializer
+    allowed_methods = ['get']
+
+
+class LoggerView(GenericObjectView):
+
+    queryset = LoggerData
+    serializer_all = LoggerDataSerializer

@@ -16,9 +16,12 @@ from .icons import ICONS
 # Other models Import:
 from .credential_model import Credential
 
+# Base Model Import:
+from main.basemodel import BaseAutoCliModel
+
 
 # Model code:
-class Device(models.Model):
+class Device(BaseAutoCliModel, models.Model):
     """ 
         Devices is the main component of the AutoCli application,
         it contains basic network Information about devices that
@@ -119,7 +122,7 @@ class Device(models.Model):
             self.deleted = True
 
 
-class DeviceData(models.Model):
+class DeviceData(BaseAutoCliModel, models.Model):
 
     # Corelation witch device model:
     device = models.OneToOneField(Device, on_delete=models.CASCADE)
@@ -144,7 +147,7 @@ class DeviceData(models.Model):
         return f"DeviceData({self.pk}: device({self.device}))"
 
 
-class DeviceInterface(models.Model):
+class DeviceInterface(BaseAutoCliModel, models.Model):
 
     # Corelation witch device model and unique:
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
@@ -197,7 +200,7 @@ class DeviceInterface(models.Model):
         unique_together = [['device', 'port']]
 
 
-class DeviceRawData(models.Model):
+class DeviceRawData(BaseAutoCliModel, models.Model):
 
     # Corelation witch device model:
     device = models.ForeignKey(Device, on_delete=models.CASCADE)

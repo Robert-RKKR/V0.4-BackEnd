@@ -9,9 +9,9 @@ from .views.color_view import *
 urlpatterns = [
     path('test/<int:pk>', test, name='test'),
 
-    path('device', DeviceView.as_view(), name='device'),
-    path('device/<int:pk>', DeviceIdView.as_view(), name='device_id'),
+    path('device/', DevicesView.as_view(), name='device'),
+    path('device/<int:pk>', DeviceView.as_view(), name='device_id'),
 
-    path('color', ColorView.as_view(), name='color'),
-    path('color/<int:pk>', ColorIdView.as_view(), name='color_id'),
+    path('color', ColorsView.as_view(), name='color'),
+    path('color/<int:pk>', ColorView.as_view(), name='color_id'),
 ]

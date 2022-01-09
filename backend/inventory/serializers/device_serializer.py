@@ -5,18 +5,19 @@ from rest_framework import serializers
 from ..models.device_model import *
 
 
-class DeviceSerializer(serializers.ModelSerializer):
+class DeviceSerializerAll(serializers.ModelSerializer):
     
     class Meta:
         model = Device
+        fields = '__all__'
+
+
+class DeviceSerializerLimited(serializers.ModelSerializer):
+
+    class Meta:
+        model = Device
         fields = [
-            'id',
-            'created',
-            'updated',
-            'root',
             'active',
-            'ssh_status',
-            'https_status',
             'name',
             'hostname',
             'device_type',

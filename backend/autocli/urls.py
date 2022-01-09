@@ -36,7 +36,7 @@ urlpatterns = [
     path('api-token-auth', views.obtain_auth_token, name='api_key_generator'),
 
     # Applications URL-s:
-    path('api/inventory/', include('inventory.urls')),
-    path('api/administration/', include('administration.urls')),
-    path('api/logger/', include('logger.urls')),
+    path('inventory/', include('inventory.urls')),
+    path('administration/', include('administration.urls')),
+    path('logger/', include('logger.urls')),
 ]

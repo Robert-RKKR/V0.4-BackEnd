@@ -210,8 +210,8 @@ class DataSSHCollectionManager:
             pass
 
         # Update object if exist or create newone:
-        object_values = command_data['model'].__dict__.keys()
-        object_values_string = command_data['model'].__doc__
+        object_values = command_data['model']._meta.get_fields()
+        
         # Check if Test FSM outputs contains one or many dicts inside:
         if len(fsm_result) <= 1:
 
@@ -223,11 +223,11 @@ class DataSSHCollectionManager:
                 object_data.save()
 
             # Iterate thru object values list to update data based on Text FSM single dict output:
-            for value in object_values:
-                if value in object_values_string:
-                    fsm_value = fsm_result[0].get(value.upper(), None)
-                    if fsm_value is not None:
-                        object_data.__dict__[value] = fsm_value
+            for row in object_values:
+                value = row.name
+                fsm_value = fsm_result[0].get(value.upper(), None)
+                if fsm_value is not None:
+                    object_data.__dict__[value] = fsm_value
 
             # Save object:
             object_data.save()
@@ -248,11 +248,11 @@ class DataSSHCollectionManager:
                     object_data.save()
 
                 # Iterate thru object values list to update data based on Text FSM single dict output:
-                for value in object_values:
-                    if value in object_values_string:
-                        fsm_value = fsm_result_one.get(value.upper(), None)
-                        if fsm_value is not None:
-                            object_data.__dict__[value] = fsm_value
+                for row in object_values:
+                    value = row.name
+                    fsm_value = fsm_result_one.get(value.upper(), None)
+                    if fsm_value is not None:
+                        object_data.__dict__[value] = fsm_value
 
                 # Save object:
                 object_data.save()

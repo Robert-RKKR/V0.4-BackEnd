@@ -15,6 +15,12 @@ def test(request, pk):
     }
 
     data['output'] = single_device_ssh_collect(pk)
+
+    # test_object_values = Device._meta.get_fields()
+    
+    # for row in test_object_values:
+    #     print(row.name)
+    
     # data['output'] = single_device_check.delay(1)
     # data['output'] = single_device_check.delay(1)
     # print(single_device_check.name)
