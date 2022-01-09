@@ -78,7 +78,10 @@ class GenericObjectsView(APIView, TenResultsPagination):
                 elif self.serializer_all is None:
                     raise TypeError('Please provide serializer data using serializer_class attributes.')
         else:
-            return Response({'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} objects.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            return Response(
+                {'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} object.'},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
 
     # Generic Object POST View:
     def post(self, request, format=None):
@@ -106,7 +109,10 @@ class GenericObjectsView(APIView, TenResultsPagination):
                 elif self.serializer_all is None:
                     raise TypeError('Please provide serializer data using serializer_class attributes.')
         else:
-            return Response({'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} objects.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            return Response(
+                {'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} object.'},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
 
 
 class GenericObjectView(APIView):
@@ -148,7 +154,10 @@ class GenericObjectView(APIView):
                 elif self.serializer_all is None:
                     raise TypeError('Please provide serializer data using serializer_class attributes.')
         else:
-            return Response({'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} objects.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            return Response(
+                {'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} object.'},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
 
     def put(self, request, pk, format=None):
         """ Create a new object and add them to database. """
@@ -172,7 +181,10 @@ class GenericObjectView(APIView):
                 elif self.serializer_all is None:
                     raise TypeError('Please provide serializer data using serializer_class attributes.')
         else:
-            return Response({'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} objects.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            return Response(
+                {'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} object.'},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
 
     def delete(self, request, pk, format=None):
         """ Create a new object and add them to database. """
@@ -193,4 +205,7 @@ class GenericObjectView(APIView):
                 elif self.serializer_all is None:
                     raise TypeError('Please provide serializer data using serializer_class attributes.')
         else:
-            return Response({'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} objects.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            return Response(
+                {'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} object.'},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
