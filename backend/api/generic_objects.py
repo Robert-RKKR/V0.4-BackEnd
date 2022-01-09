@@ -49,7 +49,7 @@ class GenericObjectsView(APIView, TenResultsPagination):
             return self.queryset.objects.filter(**filter_dict)
         else:
             # Collect all objects from database:
-            return self.queryset.objects.all()
+           return self.queryset.objects.all()
 
     # Generic Object GET View:
     def get(self, request, format=None):

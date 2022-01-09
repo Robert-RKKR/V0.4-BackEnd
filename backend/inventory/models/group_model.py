@@ -42,7 +42,7 @@ class Group(models.Model):
         },
     )
     description = models.CharField(
-        max_length=256, default='Credentials description.',
+        max_length=256, default='Group description.',
         validators=[description_validator],
         error_messages={
             'invalid': 'Enter the correct description value. It must contain 8 to 256 digits, letters and special characters -, _, . or spaces.',
