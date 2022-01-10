@@ -11,6 +11,8 @@ from api.generic_objects import GenericObjectView
 
 class LoggersView(GenericObjectsView):
 
+    from rest_framework import permissions
+    permission_classes = [permissions.AllowAny]
     queryset = LoggerData
     serializer_all = LoggerDataSerializer
     allowed_methods = ['get']

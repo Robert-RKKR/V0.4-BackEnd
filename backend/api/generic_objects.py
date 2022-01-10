@@ -27,8 +27,26 @@ class GenericObjectsView(APIView, TenResultsPagination):
     # Allowed methods data:
     allowed_methods = ['get', 'post']
 
+    def _key_filter_params_check(self, key):
+        """ Check if provided key is correct object attribute. """
+
+        # Collect first part of key:
+        key_first_part = key.split('__')[0]
+        # Collect all object values:
+        object_values = self.queryset._meta.get_fields()
+
+        # Check if provided key is correct object attribute:
+        for row in object_values:
+            value = row.name
+            if key_first_part == value:
+                return True
+        
+        # Return False if ...
+        return False
+
     def _filter(self, request):
         """ Filter objects by using request url filtering. """
+
         # Collect filters data from URL:
         filter_params = self.request.query_params
         
@@ -36,15 +54,10 @@ class GenericObjectsView(APIView, TenResultsPagination):
         if filter_params:
             # Temporary data dictionary:
             filter_dict = {}
-            # Collect all object values:
-            object_values = self.queryset._meta.get_fields()
             # Check if provided data are validone:
             for key in filter_params:
-                for row in object_values:
-                    value = row.name
-                    if value == key:
-                        filter_dict[key] = filter_params[key]
-                        break
+                if self._key_filter_params_check(key):
+                    filter_dict[key] = filter_params[key]
             # Collect filtered objects from database:
             return self.queryset.objects.filter(**filter_dict)
         else:

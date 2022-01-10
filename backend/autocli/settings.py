@@ -127,6 +127,16 @@ REST_FRAMEWORK = {
     #'USER_DETAILS_SERIALIZER':'administration.serializer.AdministratorDetailsSerializer'
 }
 
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
