@@ -28,7 +28,11 @@ class GenericObjectsView(APIView, TenResultsPagination):
     allowed_methods = ['get', 'post']
 
     def _key_check(self, key):
-        """ Xxx. """
+        """
+            Check if provided key is valid and sub parameter of provided key is allowed.
+                - Return an error list if one of the above statements is not satisfied.
+                - Return True value if all of above statements are satisfied.
+        """
 
         # Collect errors if they occur:
         key_errors = []
