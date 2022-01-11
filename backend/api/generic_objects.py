@@ -27,42 +27,112 @@ class GenericObjectsView(APIView, TenResultsPagination):
     # Allowed methods data:
     allowed_methods = ['get', 'post']
 
-    def _key_filter_params_check(self, key):
-        """ Check if provided key is correct object attribute. """
+    def _key_check(self, key):
+        """ Xxx. """
 
-        # Collect first part of key:
-        key_first_part = key.split('__')[0]
+        # Collect errors if they occur:
+        key_errors = []
+        # List of valid sub parameters:
+        key_paramaters = ['contains']
+        # Split key into pieces:
+        key_pieces = key.split('__')
+        key_name = key_pieces[0]
+        # Check that the key contains the correct sub parameter.
+        # And there is only one sub parameter:
+        if len(key_pieces) == 2:
+            key_parameter = key_pieces[1]
+            # Check if provided sub parameter is valid:
+            if key_parameter not in key_paramaters:
+                key_errors.append(f"Key {key_name} possesses invalid sub parameter '{key_parameter}'.")
+        elif len(key_pieces) == 1:
+            pass
+        else: # Add error to error list:
+            parameters = [parameter for parameter in key_pieces if parameter != key_name]
+            key_errors.append(f'Key {key_name} contains to meany arguments {parameters}.')
+
         # Collect all object values:
         object_values = self.queryset._meta.get_fields()
-
-        # Check if provided key is correct object attribute:
+        valid_object = False
+        # Check if the specified key is a valid object attribute:
         for row in object_values:
             value = row.name
-            if key_first_part == value:
-                return True
-        
-        # Return False if ...
-        return False
+            if key_name == value:
+                valid_object = True
+        # If key is not valid add error to list of errors:
+        if valid_object is False:
+            key_errors.append(f"Value '{key_name}' is not valid key for {self.queryset._meta.object_name} object.")
 
-    def _filter(self, request):
-        """ Filter objects by using request url filtering. """
+        # Check for any errors occur, if not return filter dictionary:
+        if len(key_errors) > 0:
+            return key_errors
+        else:
+            return True
+
+    def _filter(self, filter_params):
+        """
+            Filter objects by using request url filtering.
+                - Return list of errors, if provided request URL is invalid.
+                - Return a dictionary containing the filter parameters.
+        """
+
+        # Collect filter parameters:
+        filter_parameters = {}
+        # Collect errors if they occur:
+        filter_errors = []
+        # Check if provided parameters are valid:
+        for key in filter_params:
+            key_check_response = self._key_check(key)
+            # Check if response is valid:
+            if key_check_response is True:
+                # If provided key is valid, add key and value into dictionary: 
+                filter_parameters[key] = filter_params[key]
+            else: # If provided key is not valid, add error to error list:
+                filter_errors.append(key_check_response)
+
+        # Check for any errors occur, if not return filter dictionary:
+        if len(filter_errors) > 0:
+            return filter_errors
+        else: # Return filter dictionary:
+            return filter_parameters
+    
+    def _collect_objects(self, request):
+        """
+            Collect all object based on request URL address.
+                - Return dictionary contains error, if provided request URL is invalid.
+                - Return object/s if provided request URL is valid.
+        """
 
         # Collect filters data from URL:
         filter_params = self.request.query_params
-        
-        # Check if collected data exist, if not return all objects:
+
+        # Check if provided URL address contains additional parameters:
         if filter_params:
-            # Temporary data dictionary:
-            filter_dict = {}
-            # Check if provided data are validone:
-            for key in filter_params:
-                if self._key_filter_params_check(key):
-                    filter_dict[key] = filter_params[key]
-            # Collect filtered objects from database:
-            return self.queryset.objects.filter(**filter_dict)
+            # Run filter process:
+            filter_response = self._filter(filter_params)
+            # If filter method returned error list, return error dictionary:
+            if isinstance(filter_response, list):
+                # Check length of error list:
+                iterate_intiger = 1
+                if len(filter_response) > 1:
+                    # Create response dictionary:
+                    response_errors = {'detail': {}}
+                    # Fill response dictionary:
+                    for error in filter_response:
+                        # Add error to response dictionary:
+                        response_errors['detail'][f'Error: {iterate_intiger}'] = error
+                        # Increase iterate intiger by one.
+                        iterate_intiger += 1
+                    # Return error dictionary:
+                    return response_errors
+                else: # If there is only one error, return special version of error response:
+                    return {'detail': filter_response[0]}
+            else: # Return the filtered objects: 
+                return self.queryset.objects.filter(**filter_response)
+        # Return all object if additional parameters are not provided:
         else:
             # Collect all objects from database:
-           return self.queryset.objects.all()
+            return self.queryset.objects.all()
+
 
     # Generic Object GET View:
     def get(self, request, format=None):
@@ -73,8 +143,16 @@ class GenericObjectsView(APIView, TenResultsPagination):
             # Check if required data are provided:
             if self.queryset and self.serializer_all:
 
-                # Filter output objects:
-                many_objects = self._filter(request)
+                # Collect object or error/s if the specified request URL is invalid:
+                collect_object_response = self._collect_objects(request)
+                # If the collect method returns an error dictionary, return the error page:
+                if isinstance(collect_object_response, dict):
+                    return Response(
+                        collect_object_response,
+                        status=status.HTTP_405_METHOD_NOT_ALLOWED)
+                # Collect objects if provided by collect method:
+                else:
+                    many_objects = collect_object_response
                 # Pass objects through paginator to receive page breaks:
                 paginator = self.paginate_queryset(many_objects, request, view=self)
                 # Pass pages through serializer to receive the right view of object data:
