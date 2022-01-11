@@ -47,12 +47,12 @@ class GenericObjectsView(APIView, TenResultsPagination):
             key_parameter = key_pieces[1]
             # Check if provided sub parameter is valid:
             if key_parameter not in key_paramaters:
-                key_errors.append(f"Key {key_name} possesses invalid sub parameter '{key_parameter}'.")
+                key_errors.append({key_name: f"Key {key_name} possesses invalid sub parameter '{key_parameter}'."})
         elif len(key_pieces) == 1:
             pass
         else: # Add error to error list:
             parameters = [parameter for parameter in key_pieces if parameter != key_name]
-            key_errors.append(f'Key {key_name} contains to meany arguments {parameters}.')
+            key_errors.append({key_name: f'Key {key_name} contains to meany arguments {parameters}.'})
 
         # Collect all object values:
         object_values = self.queryset._meta.get_fields()
@@ -64,7 +64,7 @@ class GenericObjectsView(APIView, TenResultsPagination):
                 valid_object = True
         # If key is not valid add error to list of errors:
         if valid_object is False:
-            key_errors.append(f"Value '{key_name}' is not valid key for {self.queryset._meta.object_name} object.")
+            key_errors.append({key_name: f"Value '{key_name}' is not valid key for {self.queryset._meta.object_name} object."})
 
         # Check for any errors occur, if not return filter dictionary:
         if len(key_errors) > 0:
@@ -115,21 +115,18 @@ class GenericObjectsView(APIView, TenResultsPagination):
             filter_response = self._filter(filter_params)
             # If filter method returned error list, return error dictionary:
             if isinstance(filter_response, list):
-                # Check length of error list:
-                iterate_intiger = 1
-                if len(filter_response) > 1:
-                    # Create response dictionary:
-                    response_errors = {'detail': {}}
-                    # Fill response dictionary:
-                    for error in filter_response:
-                        # Add error to response dictionary:
-                        response_errors['detail'][f'Error: {iterate_intiger}'] = error
-                        # Increase iterate intiger by one.
-                        iterate_intiger += 1
-                    # Return error dictionary:
-                    return response_errors
-                else: # If there is only one error, return special version of error response:
-                    return {'detail': filter_response[0]}
+                # Create response dictionary:
+                response_errors = {'detail': {}}
+                # Fill response dictionary:
+                for error_group in filter_response:
+                    # Add error to response dictionary:
+                    error_list = []
+                    for one_error in error_group:
+                        for key_name in one_error:
+                            error_list.append(one_error[key_name])
+                        response_errors['detail'][f'Error with key {key_name}'] = error_list
+                # Return error dictionary:
+                return response_errors
             else: # Return the filtered objects: 
                 return self.queryset.objects.filter(**filter_response)
         # Return all object if additional parameters are not provided:
