@@ -38,39 +38,48 @@ class GenericObjectsView(APIView, TenResultsPagination):
         key_errors = []
         # List of valid sub parameters:
         key_paramaters = ['contains']
+        # List of excluded keys:
+        excluded_keys = ['page']
         # Split key into pieces:
         key_pieces = key.split('__')
         key_name = key_pieces[0]
-        # Check that the key contains the correct sub parameter.
-        # And there is only one sub parameter:
-        if len(key_pieces) == 2:
-            key_parameter = key_pieces[1]
-            # Check if provided sub parameter is valid:
-            if key_parameter not in key_paramaters:
-                key_errors.append({key_name: f"Key {key_name} possesses invalid sub parameter '{key_parameter}'."})
-        elif len(key_pieces) == 1:
-            pass
-        else: # Add error to error list:
-            parameters = [parameter for parameter in key_pieces if parameter != key_name]
-            key_errors.append({key_name: f'Key {key_name} contains to meany arguments {parameters}.'})
 
-        # Collect all object values:
-        object_values = self.queryset._meta.get_fields()
-        valid_object = False
-        # Check if the specified key is a valid object attribute:
-        for row in object_values:
-            value = row.name
-            if key_name == value:
-                valid_object = True
-        # If key is not valid add error to list of errors:
-        if valid_object is False:
-            key_errors.append({key_name: f"Value '{key_name}' is not valid key for {self.queryset._meta.object_name} object."})
+        # Check if sub parameter is excluded:
+        if key_name not in excluded_keys:
+            # Check that the key contains the correct sub parameter.
+            # And there is only one sub parameter:
+            if len(key_pieces) == 2:
+                key_parameter = key_pieces[1]
+                # Check if provided sub parameter is valid:
+                if key_parameter not in key_paramaters:
+                    key_errors.append({key_name: f"Key {key_name} possesses invalid sub parameter '{key_parameter}'."})
+            elif len(key_pieces) == 1:
+                pass 
+            else: # Add error to error list:
+                parameters = [parameter for parameter in key_pieces if parameter != key_name]
+                key_errors.append({key_name: f'Key {key_name} contains to meany arguments {parameters}.'})
 
-        # Check for any errors occur, if not return filter dictionary:
-        if len(key_errors) > 0:
-            return key_errors
+            # Collect all object values:
+            object_values = self.queryset._meta.get_fields()
+            valid_object = False
+            # Check if the specified key is a valid object attribute:
+            for row in object_values:
+                value = row.name
+                if key_name == value:
+                    valid_object = True
+            # If key is not valid add error to list of errors:
+            if valid_object is False:
+                key_errors.append({key_name: f"Value '{key_name}' is not valid key for {self.queryset._meta.object_name} object."})
+
+            # Check for any errors occur, if not return filter dictionary:
+            if len(key_errors) > 0:
+                return key_errors
+            else:
+                return True
+
+        # Return false if key is excluded:
         else:
-            return True
+            return False
 
     def _filter(self, filter_params):
         """
@@ -90,6 +99,9 @@ class GenericObjectsView(APIView, TenResultsPagination):
             if key_check_response is True:
                 # If provided key is valid, add key and value into dictionary: 
                 filter_parameters[key] = filter_params[key]
+            elif key_check_response is False:
+                # Pass if key is excluded:
+                pass
             else: # If provided key is not valid, add error to error list:
                 filter_errors.append(key_check_response)
 
