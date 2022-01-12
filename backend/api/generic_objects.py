@@ -29,6 +29,80 @@ class GenericObjectsView(APIView, TenResultsPagination):
     # All orders:
     orders = None
 
+
+    # Generic Object GET View:
+    def get(self, request, format=None):
+        """ Collect all objects from database. Filter options are avaliable. """
+
+        # Check if GET methods is allowed:
+        if 'get' in self.allowed_methods:
+            # Check if required data are provided:
+            if self.queryset and self.serializer_all:
+
+                # Collect object or error/s if the specified request URL is invalid:
+                collect_object_response = self._collect_objects(request)
+                # If the collect method returns an error dictionary, return the error page:
+                if isinstance(collect_object_response, dict):
+                    return Response(
+                        collect_object_response,
+                        status=status.HTTP_405_METHOD_NOT_ALLOWED)
+                # Collect objects if provided by collect method:
+                else:
+                    many_objects = collect_object_response
+                # Pass objects through paginator to receive page breaks:
+                paginator = self.paginate_queryset(many_objects, request, view=self)
+                # Pass pages through serializer to receive the right view of object data:
+                serializer = self.serializer_all(paginator, many=True, context={'request':request})
+                # Create response API:
+                response = self.get_paginated_response(serializer.data)
+                # Return REST API response:
+                return response
+        
+            # Return error message if required data was not provided:
+            else:
+                if self.queryset is None:
+                    raise TypeError('Please provide object data using queryset attributes.')
+                elif self.serializer_all is None:
+                    raise TypeError('Please provide serializer data using serializer_class attributes.')
+        else:
+            return Response(
+                {'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} object.'},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
+
+    # Generic Object POST View:
+    def post(self, request, format=None):
+        """ Create a new object and add them to database. """
+
+        # Check if GET methods is allowed:
+        if 'post' in self.allowed_methods:
+            # Check if required data are provided:
+            if self.queryset and self.serializer_all:
+
+                # Use limited serializer if provided or all serializer if limited is not provided:
+                if self.serializer_limited:
+                     serializer = self.serializer_limited(data=request.data)
+                else:
+                    serializer = self.serializer_all(data=request.data)
+                
+                # Use serializer to create a new object, based on provided JSON data:
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Return error message if required data was not provided:
+            else:
+                if self.queryset is None:
+                    raise TypeError('Please provide object data using queryset attributes.')
+                elif self.serializer_all is None:
+                    raise TypeError('Please provide serializer data using serializer_class attributes.')
+        else:
+            return Response(
+                {'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} object.'},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
+
     def _key_check(self, key):
         """
             Check if provided key is valid and sub parameter of provided key is allowed.
@@ -193,80 +267,6 @@ class GenericObjectsView(APIView, TenResultsPagination):
                 return self.queryset.objects.filter(**filter_data).order_by(*self.orders)
             else:
                 return self.queryset.objects.filter(**filter_data)
-
-
-    # Generic Object GET View:
-    def get(self, request, format=None):
-        """ Collect all objects from database. Filter options are avaliable. """
-
-        # Check if GET methods is allowed:
-        if 'get' in self.allowed_methods:
-            # Check if required data are provided:
-            if self.queryset and self.serializer_all:
-
-                # Collect object or error/s if the specified request URL is invalid:
-                collect_object_response = self._collect_objects(request)
-                # If the collect method returns an error dictionary, return the error page:
-                if isinstance(collect_object_response, dict):
-                    return Response(
-                        collect_object_response,
-                        status=status.HTTP_405_METHOD_NOT_ALLOWED)
-                # Collect objects if provided by collect method:
-                else:
-                    many_objects = collect_object_response
-                # Pass objects through paginator to receive page breaks:
-                paginator = self.paginate_queryset(many_objects, request, view=self)
-                # Pass pages through serializer to receive the right view of object data:
-                serializer = self.serializer_all(paginator, many=True, context={'request':request})
-                # Create response API:
-                response = self.get_paginated_response(serializer.data)
-                # Return REST API response:
-                return response
-        
-            # Return error message if required data was not provided:
-            else:
-                if self.queryset is None:
-                    raise TypeError('Please provide object data using queryset attributes.')
-                elif self.serializer_all is None:
-                    raise TypeError('Please provide serializer data using serializer_class attributes.')
-        else:
-            return Response(
-                {'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} object.'},
-                status=status.HTTP_405_METHOD_NOT_ALLOWED
-            )
-
-    # Generic Object POST View:
-    def post(self, request, format=None):
-        """ Create a new object and add them to database. """
-
-        # Check if GET methods is allowed:
-        if 'post' in self.allowed_methods:
-            # Check if required data are provided:
-            if self.queryset and self.serializer_all:
-
-                # Use limited serializer if provided or all serializer if limited is not provided:
-                if self.serializer_limited:
-                     serializer = self.serializer_limited(data=request.data)
-                else:
-                    serializer = self.serializer_all(data=request.data)
-                
-                # Use serializer to create a new object, based on provided JSON data:
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            
-            # Return error message if required data was not provided:
-            else:
-                if self.queryset is None:
-                    raise TypeError('Please provide object data using queryset attributes.')
-                elif self.serializer_all is None:
-                    raise TypeError('Please provide serializer data using serializer_class attributes.')
-        else:
-            return Response(
-                {'detail': f'Method {self.request.method} is not allowed on {self.queryset._meta.object_name} object.'},
-                status=status.HTTP_405_METHOD_NOT_ALLOWED
-            )
 
 
 class GenericObjectView(APIView):
