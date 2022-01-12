@@ -26,6 +26,8 @@ class GenericObjectsView(APIView, TenResultsPagination):
     filter_fields = ('id',)
     # Allowed methods data:
     allowed_methods = ['get', 'post']
+    # All orders:
+    orders = None
 
     def _key_check(self, key):
         """
@@ -39,7 +41,7 @@ class GenericObjectsView(APIView, TenResultsPagination):
         # List of valid sub parameters:
         key_paramaters = ['contains']
         # List of excluded keys:
-        excluded_keys = ['page']
+        excluded_keys = ['page', 'order']
         # Split key into pieces:
         key_pieces = key.split('__')
         key_name = key_pieces[0]
@@ -92,18 +94,37 @@ class GenericObjectsView(APIView, TenResultsPagination):
         filter_parameters = {}
         # Collect errors if they occur:
         filter_errors = []
+        # Create order list:
+        self.orders = []
         # Check if provided parameters are valid:
         for key in filter_params:
-            key_check_response = self._key_check(key)
-            # Check if response is valid:
-            if key_check_response is True:
-                # If provided key is valid, add key and value into dictionary: 
-                filter_parameters[key] = filter_params[key]
-            elif key_check_response is False:
-                # Pass if key is excluded:
-                pass
-            else: # If provided key is not valid, add error to error list:
-                filter_errors.append(key_check_response)
+
+            # Collect kay parameter:
+            parameter = filter_params[key]
+
+            # Separate the key containing the order parameter, from other keys:
+            if key == 'order':
+                # Collect all object values:
+                object_values = self.queryset._meta.get_fields()
+                # Add order parameter to order list if valid:
+                for row in object_values:
+                    value = row.name
+                    if parameter == value:
+                        self.orders.append(parameter)
+                    else:
+                        filter_errors.append([{key: f"Provided order value '{parameter}' is not valid."}])
+            else:
+                # Check if provided key is valid:
+                key_check_response = self._key_check(key)
+                # Check if response is valid:
+                if key_check_response is True:
+                    # If provided key is valid, add key and value into dictionary: 
+                    filter_parameters[key] = parameter
+                elif key_check_response is False:
+                    # Pass if key is excluded:
+                    pass
+                else: # If provided key is not valid, add error to error list:
+                    filter_errors.append(key_check_response)
 
         # Check for any errors occur, if not return filter dictionary:
         if len(filter_errors) > 0:
@@ -120,6 +141,8 @@ class GenericObjectsView(APIView, TenResultsPagination):
 
         # Collect filters data from URL:
         filter_params = self.request.query_params
+        # Filter data:
+        filter_data = None
 
         # Check if provided URL address contains additional parameters:
         if filter_params:
@@ -139,12 +162,20 @@ class GenericObjectsView(APIView, TenResultsPagination):
                         response_errors['detail'][f'Error with key {key_name}'] = error_list
                 # Return error dictionary:
                 return response_errors
-            else: # Return the filtered objects: 
-                return self.queryset.objects.filter(**filter_response)
-        # Return all object if additional parameters are not provided:
+            else: # Return the filtered objects to filter data:
+                filter_data = filter_response
+        
+        # Check if filters are provided, if no return all objects:
+        if filter_data is None:
+            if isinstance(self.orders, list):
+                return self.queryset.objects.all().order_by(*self.orders)
+            else:
+                return self.queryset.objects.all()
         else:
-            # Collect all objects from database:
-            return self.queryset.objects.all()
+            if isinstance(self.orders, list):
+                return self.queryset.objects.filter(**filter_data).order_by(*self.orders)
+            else:
+                return self.queryset.objects.filter(**filter_data)
 
 
     # Generic Object GET View:
