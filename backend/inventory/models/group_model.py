@@ -70,6 +70,7 @@ class Group(models.Model):
         else:
             # Change deleted value to True, to inform that object is deleted:
             self.deleted = True
+            self.save()
 
 
 # Relations models:
