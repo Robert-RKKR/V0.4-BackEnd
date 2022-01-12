@@ -197,7 +197,12 @@ class GenericObjectsView(APIView, TenResultsPagination):
             if self.queryset and self.serializer_all:
 
                 # Use limited serializer if provided or all serializer if limited is not provided:
-                serializer = self.serializer_all(data=request.data)
+                if self.serializer_limited:
+                     serializer = self.serializer_limited(data=request.data)
+                else:
+                    serializer = self.serializer_all(data=request.data)
+                
+                # Use serializer to create a new object, based on provided JSON data:
                 if serializer.is_valid():
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -244,7 +249,9 @@ class GenericObjectView(APIView):
             # Check if required data are provided:
             if self.queryset and self.serializer_all:
                 
+                # Provide one object from database:
                 one_object = self._get_object(pk)
+                # Use serializer:
                 serializer = self.serializer_all(one_object)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             
@@ -268,8 +275,15 @@ class GenericObjectView(APIView):
             # Check if required data are provided:
             if self.queryset and self.serializer_all:
                 
+                # Provide one object from database:
                 one_object = self._get_object(pk)
-                serializer = self.serializer_all(one_object, data=request.data)
+                # Use limited serializer if provided or all serializer if limited is not provided:
+                if self.serializer_limited:
+                     serializer = self.serializer_limited(one_object, data=request.data)
+                else:
+                    serializer = self.serializer_all(one_object, data=request.data)
+                
+                # Use serializer to update object, based on provided JSON data:
                 if serializer.is_valid():
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -295,7 +309,9 @@ class GenericObjectView(APIView):
             # Check if required data are provided:
             if self.queryset and self.serializer_all:
                 
+                # Provide one object from database:
                 one_object = self._get_object(pk)
+                # Delete object from database:
                 one_object.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
             

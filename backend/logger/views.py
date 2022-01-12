@@ -3,6 +3,7 @@ from .models import LoggerData
 
 # Serializes Import:
 from .serializers import LoggerDataSerializer
+from .serializers import LoggerDataSerializerUpdateCreate
 
 # Generic objects Import:
 from api.generic_objects import GenericObjectsView
@@ -15,10 +16,11 @@ class LoggersView(GenericObjectsView):
     permission_classes = [permissions.AllowAny]
     queryset = LoggerData
     serializer_all = LoggerDataSerializer
-    allowed_methods = ['get']
+    serializer_limited = LoggerDataSerializerUpdateCreate
 
 
 class LoggerView(GenericObjectView):
 
     queryset = LoggerData
     serializer_all = LoggerDataSerializer
+    serializer_limited = LoggerDataSerializerUpdateCreate
