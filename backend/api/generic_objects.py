@@ -83,6 +83,25 @@ class GenericObjectsView(APIView, TenResultsPagination):
         else:
             return False
 
+    def _order_check(self, parameter, key):
+        """ Check if order value is valid. """
+
+        # Collect all object values:
+        object_values = self.queryset._meta.get_fields()
+
+        # Check if order value is valid:
+        for row in object_values:
+            value = row.name
+            if parameter[0] == '-':
+                if parameter[1:] == value:
+                    return parameter
+            else:
+                if parameter == value:
+                    return parameter
+
+        # Return error if provided order value is not valid:
+        return [{key: f"Provided order value '{parameter}' is not valid."}]
+
     def _filter(self, filter_params):
         """
             Filter objects by using request url filtering.
@@ -104,15 +123,13 @@ class GenericObjectsView(APIView, TenResultsPagination):
 
             # Separate the key containing the order parameter, from other keys:
             if key == 'order':
-                # Collect all object values:
-                object_values = self.queryset._meta.get_fields()
                 # Add order parameter to order list if valid:
-                for row in object_values:
-                    value = row.name
-                    if parameter == value:
-                        self.orders.append(parameter)
-                    else:
-                        filter_errors.append([{key: f"Provided order value '{parameter}' is not valid."}])
+                check_order_response = self._order_check(parameter, key)
+                if isinstance(check_order_response, list):
+                    filter_errors.append(check_order_response)
+                else:
+                    self.orders.append(check_order_response)
+                
             else:
                 # Check if provided key is valid:
                 key_check_response = self._key_check(key)
