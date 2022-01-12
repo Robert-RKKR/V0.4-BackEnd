@@ -88,6 +88,7 @@ class DataSSHCollectionManager:
 
     def collect(self) -> bool:
         """ Xxx """
+
         # Check device type supported status if yes collect data:
         device_type = self._system_version_check()
         if device_type == 'unsupported':
@@ -102,6 +103,7 @@ class DataSSHCollectionManager:
 
     def _system_version_check(self):
         """ Check if device type is supported """
+
         # Check device type supported status function:
         def check(device_type):
             for commands_device_type in commands_database:
@@ -137,6 +139,7 @@ class DataSSHCollectionManager:
 
     def _manage_data_collection(self, device_type):
         """ Manage the data collection process. """
+        
         # Collect commands list related to current device type:
         for commands_device_type in commands_database:
             if commands_device_type == device_type:

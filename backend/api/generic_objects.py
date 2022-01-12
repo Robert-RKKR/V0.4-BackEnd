@@ -185,10 +185,7 @@ class GenericObjectsView(APIView, TenResultsPagination):
             if self.queryset and self.serializer_all:
 
                 # Use limited serializer if provided or all serializer if limited is not provided:
-                if self.serializer_limited:
-                    serializer = self.serializer_limited(data=request.data)
-                else:
-                    serializer = self.serializer_all(data=request.data)
+                serializer = self.serializer_all(data=request.data)
                 if serializer.is_valid():
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_201_CREATED)

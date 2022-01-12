@@ -18,6 +18,7 @@ class TenResultsPagination(PageNumberPagination):
             'next': self.get_next_link(),
             'previous': self.get_previous_link(),
             'count': self.page.paginator.count,
+            'pagination': self.size,
             'pages': math.ceil(self.page.paginator.count/self.size),
             'results': data
         })
@@ -34,6 +35,7 @@ class HundredResultsPagination(PageNumberPagination):
             'next': self.get_next_link(),
             'previous': self.get_previous_link(),
             'count': self.page.paginator.count,
+            'pagination': self.size,
             'pages': math.ceil(self.page.paginator.count/self.size),
             'results': data
         })
@@ -50,6 +52,7 @@ class ThousandResultsPagination(PageNumberPagination):
             'next': self.get_next_link(),
             'previous': self.get_previous_link(),
             'count': self.page.paginator.count,
+            'pagination': self.size,
             'pages': math.ceil(self.page.paginator.count/self.size),
             'results': data
         })
