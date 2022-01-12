@@ -13,19 +13,14 @@ class ColorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Color
         depth = 1
-        fields = [
-            'id',
-            'created',
-            'updated',
-            'root',
-            'active',
-            'name',
-            'hexadecimal',
-            'description',
-            'devices',
-            'groups',
-            'credentials',
-        ]
+        fields = '__all__'
+
+
+class ColorSerializerUpdateCreate(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Color
+        fields = '__all__'
 
 
 class ColorDeviceRelationSerializer(serializers.ModelSerializer):
@@ -33,14 +28,14 @@ class ColorDeviceRelationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ColorDeviceRelation
         depth = 1
-        fields = [
-            'id',
-            'created',
-            'updated',
-            'root',
-            'device',
-            'color',
-        ]
+        fields = '__all__'
+
+
+class ColorDeviceRelationSerializerUpdateCreate(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ColorDeviceRelation
+        fields = '__all__'
 
 
 class ColorGroupRelationSerializer(serializers.ModelSerializer):
@@ -48,14 +43,14 @@ class ColorGroupRelationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ColorGroupRelation
         depth = 1
-        fields = [
-            'id',
-            'created',
-            'updated',
-            'root',
-            'group',
-            'color',
-        ]
+        fields = '__all__'
+
+
+class ColorGroupRelationSerializerUpdateCreate(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ColorGroupRelation
+        fields = '__all__'
 
 
 class ColorCredentialRelationSerializer(serializers.ModelSerializer):
@@ -63,11 +58,11 @@ class ColorCredentialRelationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ColorCredentialRelation
         depth = 1
-        fields = [
-            'id',
-            'created',
-            'updated',
-            'root',
-            'credential',
-            'color',
-        ]
+        fields = '__all__'
+
+
+class ColorCredentialRelationSerializerUpdateCreate(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ColorCredentialRelation
+        fields = '__all__'
