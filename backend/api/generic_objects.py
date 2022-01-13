@@ -141,10 +141,10 @@ class GenericObjectsView(APIView, TenResultsPagination):
                     key_parameter_allowed = value[1]
                     # Check if sub parameter is in key parameter list:
                     if key_parameter == key_parameter_name:
-                        # Check if sub parameter is valid for used key object type:
+                        # Check if sub parameter is always allowed:
                         if key_parameter_allowed == 'all':
                             is_valid = True
-                        else:
+                        else: # Check if sub parameter is valid for used key object type:
                             for row in object_values:
                                 value = row.name
                                 if key_name == value:
@@ -154,6 +154,7 @@ class GenericObjectsView(APIView, TenResultsPagination):
                                     else:
                                         key_errors.append({key_name: f"Parameter '{key_parameter}' is not allowed with key {key_name}, because class attributes is {class_name} type."})
                                         is_valid = None
+                # If provided sub parameter is not valid, add error to queen:
                 if is_valid is False:
                     key_errors.append({key_name: f"Key {key_name} possesses invalid sub parameter '{key_parameter}'."})
             elif len(key_pieces) == 1:
