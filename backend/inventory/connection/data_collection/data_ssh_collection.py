@@ -25,29 +25,29 @@ commands_database = {
             'model': DeviceInterface,
             'required': 'port',
         },
-        # {
-        #     'command_name': 'show vrf',
-        #     'command_template_name': 'cisco_ios/xxxx.textfsm',
-        #     'model': DeviceData,
-        # },
-        # {
-        #     'command_name': 'show vrf interface',
-        #     'command_template_name': 'cisco_ios/xxxx.textfsm',
-        #     'model': DeviceData,
-        # },
-        # {
-        #     'command_name': 'show cdp neighbors detail',
-        #     'command_template_name': 'cisco_ios/xxxx.textfsm',
-        #     'model': DeviceData,
-        # },
-        # {
-        #     'command_name': 'show running-config',
-        #     'command_template_name': 'cisco_ios/xxxx.textfsm',
-        #     'model': DeviceData,
-        # },
         {
             'command_name': 'show version',
             'command_template_name': 'cisco_ios/cisco_ios_show_version.textfsm',
+            'model': DeviceData,
+        },
+        {
+            'command_name': 'show vrf',
+            'command_template_name': 'cisco_ios/xxxx.textfsm',
+            'model': DeviceData,
+        },
+        {
+            'command_name': 'show vrf interface',
+            'command_template_name': 'cisco_ios/xxxx.textfsm',
+            'model': DeviceData,
+        },
+        {
+            'command_name': 'show cdp neighbors detail',
+            'command_template_name': 'cisco_ios/xxxx.textfsm',
+            'model': DeviceData,
+        },
+        {
+            'command_name': 'show running-config',
+            'command_template_name': 'cisco_ios/xxxx.textfsm',
             'model': DeviceData,
         },
     ],
@@ -139,7 +139,7 @@ class DataSSHCollectionManager:
 
     def _manage_data_collection(self, device_type):
         """ Manage the data collection process. """
-        
+
         # Collect commands list related to current device type:
         for commands_device_type in commands_database:
             if commands_device_type == device_type:

@@ -1,5 +1,5 @@
 {
-    "name": "cisco_ios",
+    "name": "cisco_xe",
     "commands": [
         {
             "command_name": "show interfaces",
