@@ -2,9 +2,10 @@
 from django.urls import path
 
 # Application Import:
-from .views import LoggersView, LoggerView
+from .views import LoggerIdView
+from .views import LoggerView
 
 urlpatterns = [
-    path('log/', LoggersView.as_view(), name='logs'),
-    path('log/<int:pk>', LoggerView.as_view(), name='log'),
+    path('log/', LoggerView.as_view(), name='logs'),
+    path('log/<int:pk>', LoggerIdView.as_view(), name='log'),
 ]

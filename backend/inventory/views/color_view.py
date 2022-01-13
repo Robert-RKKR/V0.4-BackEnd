@@ -24,14 +24,14 @@ from api.generic_objects import GenericObjectView
 
 
 # Color Views:
-class ColorsView(GenericObjectsView):
+class ColorView(GenericObjectsView):
 
     queryset = Color
     serializer_all = ColorSerializer
     serializer_limited = ColorSerializerUpdateCreate
 
 
-class ColorView(GenericObjectView):
+class ColorIdView(GenericObjectView):
 
     queryset = Color
     serializer_all = ColorSerializer
@@ -39,14 +39,14 @@ class ColorView(GenericObjectView):
 
 
 # ColorDeviceRelation Views:
-class ColorDeviceRelationsView(GenericObjectsView):
+class ColorDeviceRelationView(GenericObjectsView):
 
     queryset = ColorDeviceRelation
     serializer_all = ColorDeviceRelationSerializer
     serializer_limited = ColorDeviceRelationSerializerUpdateCreate
 
 
-class ColorDeviceRelationView(GenericObjectView):
+class ColorDeviceRelationIdView(GenericObjectView):
 
     queryset = ColorDeviceRelation
     serializer_all = ColorDeviceRelationSerializer
@@ -54,14 +54,14 @@ class ColorDeviceRelationView(GenericObjectView):
 
 
 # ColorGroupRelation Views:
-class ColorGroupRelationsView(GenericObjectsView):
+class ColorGroupRelationView(GenericObjectsView):
 
     queryset = ColorGroupRelation
     serializer_all = ColorGroupRelationSerializer
     serializer_limited = ColorGroupRelationSerializerUpdateCreate
 
 
-class ColorGroupRelationView(GenericObjectView):
+class ColorGroupRelationIdView(GenericObjectView):
 
     queryset = ColorGroupRelation
     serializer_all = ColorGroupRelationSerializer
@@ -69,14 +69,14 @@ class ColorGroupRelationView(GenericObjectView):
 
 
 # ColorCredentialRelation Views:
-class ColorCredentialRelationsView(GenericObjectsView):
+class ColorCredentialRelationView(GenericObjectsView):
 
     queryset = ColorCredentialRelation
     serializer_all = ColorCredentialRelationSerializer
     serializer_limited = ColorCredentialRelationSerializerUpdateCreate
 
 
-class ColorCredentialRelationView(GenericObjectView):
+class ColorCredentialRelationIdView(GenericObjectView):
 
     queryset = ColorCredentialRelation
     serializer_all = ColorCredentialRelationSerializer

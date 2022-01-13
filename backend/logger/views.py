@@ -10,7 +10,7 @@ from api.generic_objects import GenericObjectsView
 from api.generic_objects import GenericObjectView
 
 
-class LoggersView(GenericObjectsView):
+class LoggerView(GenericObjectsView):
 
     from rest_framework import permissions
     permission_classes = [permissions.AllowAny]
@@ -19,7 +19,7 @@ class LoggersView(GenericObjectsView):
     serializer_limited = LoggerDataSerializerUpdateCreate
 
 
-class LoggerView(GenericObjectView):
+class LoggerIdView(GenericObjectView):
 
     queryset = LoggerData
     serializer_all = LoggerDataSerializer
