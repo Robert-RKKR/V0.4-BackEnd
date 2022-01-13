@@ -9,8 +9,13 @@ from .views.color_view import *
 urlpatterns = [
     path('test/<int:pk>', test, name='test'),
 
+    # Device Views:
     path('device/', DevicesView.as_view(), name='device'),
     path('device/<int:pk>', DeviceView.as_view(), name='device_id'),
+
+    # Device Data Views:
+    path('device-data/', DevicesDataView.as_view(), name='device_data'),
+    path('device-data/<int:pk>', DeviceDataView.as_view(), name='device_data_id'),
 
     # Color Views:
     path('color/', ColorsView.as_view(), name='color'),

@@ -6,6 +6,7 @@ from api.pagination import *
 
 # Models Import:
 from ..models.device_model import Device
+from ..models.device_model import DeviceData
 
 # Generic objects Import:
 from api.generic_objects import GenericObjectsView
@@ -34,13 +35,13 @@ class DeviceView(GenericObjectView):
 
 class DevicesDataView(GenericObjectsView):
 
-    queryset = Device
+    queryset = DeviceData
     serializer_all = DeviceDataSerializer
     serializer_limited = DeviceDataSerializerUpdateCreate
 
 
 class DeviceDataView(GenericObjectView):
 
-    queryset = Device
+    queryset = DeviceData
     serializer_all = DeviceDataSerializer
     serializer_limited = DeviceDataSerializerUpdateCreate

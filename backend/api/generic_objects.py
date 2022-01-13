@@ -110,10 +110,17 @@ class GenericObjectsView(APIView, TenResultsPagination):
                 - Return True value if all of above statements are satisfied.
         """
 
+        # Collect all object values:
+        object_values = self.queryset._meta.get_fields()
         # Collect errors if they occur:
         key_errors = []
         # List of valid sub parameters:
-        key_paramaters = ['contains']
+        key_paramaters = [
+            ('contains', 'all'),
+            ('icontains', 'all'),
+            ('has_key', ['JSONField']),
+            # 'contained_by' # Only for Django 4.0 and higher.
+        ]
         # List of excluded keys:
         excluded_keys = ['page', 'order']
         # Split key into pieces:
@@ -127,7 +134,27 @@ class GenericObjectsView(APIView, TenResultsPagination):
             if len(key_pieces) == 2:
                 key_parameter = key_pieces[1]
                 # Check if provided sub parameter is valid:
-                if key_parameter not in key_paramaters:
+                is_valid = False
+                for value in key_paramaters:
+                    # Collect main values:
+                    key_parameter_name = value[0]
+                    key_parameter_allowed = value[1]
+                    # Check if sub parameter is in key parameter list:
+                    if key_parameter == key_parameter_name:
+                        # Check if sub parameter is valid for used key object type:
+                        if key_parameter_allowed == 'all':
+                            is_valid = True
+                        else:
+                            for row in object_values:
+                                value = row.name
+                                if key_name == value:
+                                    class_name = row.__class__.__name__
+                                    if class_name in key_parameter_allowed:
+                                        is_valid = True
+                                    else:
+                                        key_errors.append({key_name: f"Parameter '{key_parameter}' is not allowed with key {key_name}, because class attributes is {class_name} type."})
+                                        is_valid = None
+                if is_valid is False:
                     key_errors.append({key_name: f"Key {key_name} possesses invalid sub parameter '{key_parameter}'."})
             elif len(key_pieces) == 1:
                 pass 
@@ -135,10 +162,8 @@ class GenericObjectsView(APIView, TenResultsPagination):
                 parameters = [parameter for parameter in key_pieces if parameter != key_name]
                 key_errors.append({key_name: f'Key {key_name} contains to meany arguments {parameters}.'})
 
-            # Collect all object values:
-            object_values = self.queryset._meta.get_fields()
-            valid_object = False
             # Check if the specified key is a valid object attribute:
+            valid_object = False
             for row in object_values:
                 value = row.name
                 if key_name == value:
