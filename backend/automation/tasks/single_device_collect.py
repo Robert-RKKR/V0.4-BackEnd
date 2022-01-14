@@ -7,13 +7,13 @@ from celery import shared_task
 from autocli.celery import app
 
 # Model Import:
-from ..models.device_model import Device
+from inventory.models.device_model import Device
 
 # Logger import:
 from logger.logger import Logger
 
 # Data collection Import:
-from ..connection.data_collection.data_ssh_collection import DataSSHCollectionManager
+from inventory.connection.data_collection.data_ssh_collection import DataSSHCollectionManager
 
 # Logger class initiation:
 ssh_logger = Logger('Single device SSH collect')

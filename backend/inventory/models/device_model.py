@@ -48,7 +48,7 @@ class Device(BaseMainModel):
             'invalid': 'Enter a valid IP address or DNS resolvable hostname. It must contain 4 to 32 digits, letters and special characters -, _, . or spaces.',
         },
     )
-    device_type = models.ForeignKey(DeviceType, on_delete=models.PROTECT)
+    device_type = models.ForeignKey(DeviceType, on_delete=models.PROTECT, null=True, blank=True)
     ico = models.IntegerField(choices=ICONS, default=0)
     ssh_port = models.IntegerField(default=22)
     https_port = models.IntegerField(default=443)

@@ -10,7 +10,7 @@ from ..connection.netcon import NetCon
 from ..connection.restcon import RestCon
 
 # Model Import:
-from ..models.device_model import Device
+from inventory.models.device_model import Device
 
 # Logger import:
 from logger.logger import Logger

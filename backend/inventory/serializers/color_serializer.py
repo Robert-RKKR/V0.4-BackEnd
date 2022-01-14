@@ -7,12 +7,15 @@ from ..models.color_model import ColorDeviceRelation
 from ..models.color_model import ColorGroupRelation
 from ..models.color_model import Color
 
+# API Variable Import:
+from api.variables import DEFAULT_DEPTH
+
 
 class ColorSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Color
-        depth = 1
+        depth = DEFAULT_DEPTH
         fields = '__all__'
 
 
@@ -27,7 +30,7 @@ class ColorDeviceRelationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ColorDeviceRelation
-        depth = 1
+        depth = DEFAULT_DEPTH
         fields = '__all__'
 
 
@@ -42,7 +45,7 @@ class ColorGroupRelationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ColorGroupRelation
-        depth = 1
+        depth = DEFAULT_DEPTH
         fields = '__all__'
 
 
@@ -57,7 +60,7 @@ class ColorCredentialRelationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ColorCredentialRelation
-        depth = 1
+        depth = DEFAULT_DEPTH
         fields = '__all__'
 
 

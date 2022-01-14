@@ -13,7 +13,7 @@ class FsmTemplate(BaseMainModel):
     # Corelation witch device type template:
     device_type = models.ForeignKey(DeviceTypeTemplate, on_delete=models.PROTECT)
 
-    # Basic models:
+    # Main model values:
     command = models.CharField(max_length=128)
     sfm_expression = models.TextField()
 

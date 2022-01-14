@@ -7,13 +7,16 @@ from ..models.device_model import DeviceData
 from ..models.device_model import DeviceRawData
 from ..models.device_model import DeviceInterface
 
+# API Variable Import:
+from api.variables import DEFAULT_DEPTH
+
 
 # Device Serializer:
 class DeviceSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Device
-        depth = 1
+        depth = DEFAULT_DEPTH
         fields = '__all__'
 
 
@@ -29,7 +32,7 @@ class DeviceDataSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = DeviceData
-        depth = 1
+        depth = DEFAULT_DEPTH
         fields = '__all__'
 
 
@@ -45,7 +48,7 @@ class DeviceRawDataSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = DeviceRawData
-        depth = 1
+        depth = DEFAULT_DEPTH
         fields = '__all__'
 
 
@@ -61,7 +64,7 @@ class DeviceInterfaceSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = DeviceInterface
-        depth = 1
+        depth = DEFAULT_DEPTH
         fields = '__all__'
 
 

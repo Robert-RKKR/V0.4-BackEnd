@@ -35,6 +35,8 @@ urlpatterns = [
     # Token key generator URL:
     path('api-token-auth', views.obtain_auth_token, name='api_key_generator'),
 
+    path('automation/', include('automation.urls')),
+
     # Applications URL-s:
     path('inventory/', include('inventory.urls')),
     path('administration/', include('administration.urls')),

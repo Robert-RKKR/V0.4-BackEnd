@@ -2,12 +2,12 @@
 from django.shortcuts import render
 
 # Application Import:
-from ..tasks.single_device_collect import single_device_ssh_collect
-from ..tasks.single_device_check import single_device_check
-from ..tasks.tasks import test_task1, test_task2
 from logger.logger import Logger
 from logger.models import LoggerData
 from inventory.models.device_model import Device
+from inventory.models.device_model import DeviceType
+from automation.tasks.single_device_check import single_device_check
+
 
 def test(request, pk):
     data = {
@@ -22,16 +22,18 @@ def test(request, pk):
     #     print(row.name)
     
     # data['output'] = single_device_check.delay(1)
-    # data['output'] = single_device_check.delay(1)
     # print(single_device_check.name)
 
 
     device = Device.objects.get(pk=pk)
+
+    # from ..tasks.task_test import test
+    # data['output'] = test.delay(device.pk)
+    data['output'] = single_device_check.delay(device.pk)
+
+    from ..tasks.new_task import new_task
+    # data['output'] = new_task.delay(device.pk)
     
-    import json
-    json_example = open("inventory/connection/data_collection/collector_templates/cisco_ios.json").read()
-    json_python = json.loads(json_example)
-    data['output'] = json_python['name']
 
     # logger = Logger()
     # id_task = data['output']

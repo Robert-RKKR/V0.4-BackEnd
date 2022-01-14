@@ -1,9 +1,6 @@
 # Django Import:
 from django.urls import path
 
-# Application Import:
-from .views.test import test
-
 # Devices Import:
 from .views.device_view import DeviceView
 from .views.device_view import DeviceIdView
@@ -24,9 +21,13 @@ from .views.color_view import ColorGroupRelationIdView
 from .views.color_view import ColorCredentialRelationView
 from .views.color_view import ColorCredentialRelationIdView
 
-urlpatterns = [
-    path('test/<int:pk>', test, name='test'),
+# Group Import:
+from .views.group_view import GroupView
+from .views.group_view import GroupIdView
+from .views.group_view import GroupDeviceRelationView
+from .views.group_view import GroupDeviceRelationIdView
 
+urlpatterns = [
     # Device Views:
     path('device/', DeviceView.as_view(), name='device'),
     path('device/<int:pk>', DeviceIdView.as_view(), name='device_id'),
@@ -48,14 +49,22 @@ urlpatterns = [
     path('color/<int:pk>', ColorIdView.as_view(), name='color_id'),
 
     # ColorDeviceRelation Views:
-    path('color-device/', ColorDeviceRelationView.as_view(), name='color-device'),
-    path('color-device/<int:pk>', ColorDeviceRelationIdView.as_view(), name='color-device_id'),
+    path('color-device/', ColorDeviceRelationView.as_view(), name='color_device'),
+    path('color-device/<int:pk>', ColorDeviceRelationIdView.as_view(), name='color_device_id'),
 
     # ColorGroupRelation Views:
-    path('color-group/', ColorGroupRelationView.as_view(), name='color-group'),
-    path('color-group/<int:pk>', ColorGroupRelationIdView.as_view(), name='color-group_id'),
+    path('color-group/', ColorGroupRelationView.as_view(), name='color_group'),
+    path('color-group/<int:pk>', ColorGroupRelationIdView.as_view(), name='color_group_id'),
 
     # ColorCredentialRelation Views:
-    path('color-credential/', ColorCredentialRelationView.as_view(), name='color-credential'),
-    path('color-credential/<int:pk>', ColorCredentialRelationIdView.as_view(), name='color-credential_id'),
+    path('color-credential/', ColorCredentialRelationView.as_view(), name='color_credential'),
+    path('color-credential/<int:pk>', ColorCredentialRelationIdView.as_view(), name='color_credential_id'),
+
+    # Group Views:
+    path('group/', GroupView.as_view(), name='group'),
+    path('group/<int:pk>', GroupIdView.as_view(), name='group_id'),
+
+    # ColorDeviceRelation Views:
+    path('group-device/', GroupDeviceRelationView.as_view(), name='group_device'),
+    path('group-device/<int:pk>', GroupDeviceRelationIdView.as_view(), name='group_device_id'),
 ]

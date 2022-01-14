@@ -13,3 +13,5 @@ class DeviceTypeTemplate(BaseMainModel):
 
     # Corelation witch device type model:
     device_type = models.OneToOneField(DeviceType, on_delete=models.PROTECT)
+
+    # Main model values:
