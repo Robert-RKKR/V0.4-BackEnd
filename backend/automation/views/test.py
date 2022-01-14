@@ -7,6 +7,7 @@ from logger.models import LoggerData
 from inventory.models.device_model import Device
 from inventory.models.device_model import DeviceType
 from automation.tasks.single_device_check import single_device_check
+from automation.tasks.new_task import new_task
 
 
 def test(request, pk):
@@ -29,10 +30,9 @@ def test(request, pk):
 
     # from ..tasks.task_test import test
     # data['output'] = test.delay(device.pk)
-    data['output'] = single_device_check.delay(device.pk)
+    # data['output'] = single_device_check.delay(device.pk)
 
-    from ..tasks.new_task import new_task
-    # data['output'] = new_task.delay(device.pk)
+    data['output'] = new_task.delay(device.pk)
     
 
     # logger = Logger()
