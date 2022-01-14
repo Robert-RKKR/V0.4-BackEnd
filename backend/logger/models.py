@@ -28,7 +28,8 @@ class LoggerData(models.Model):
     application = models.CharField(max_length=128)
     severity = models.IntegerField(choices=SEVERITY)
     message = models.CharField(max_length=1024)
-    connection = models.BooleanField(default=False)
+    task_id = models.CharField(max_length=128, null=True)
+    system_message = models.BooleanField(default=False)
 
     # Models:
     device = models.ForeignKey(

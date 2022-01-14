@@ -43,7 +43,7 @@ def single_device_check(self, device_pk: int) -> bool:
             # Check HTTPS request output and change device status:
             if https_connection.status is True:
                 # Log about HTTPS connection status:
-                logger.debug(f'HTTPS testing connection to device {device.hostname}, was success.', device)
+                logger.debug(f'HTTPS testing connection to device {device.hostname}, was success.', device, task_id=self.request.id)
 
                 # Update information about device status and task status:
                 device.https_status = True
@@ -57,8 +57,8 @@ def single_device_check(self, device_pk: int) -> bool:
                 # Check SSH request output and change device status:
                 if ssh_connection.status is True:
                     # Log about HTTPS and SSH connection status:
-                    logger.debug(f'HTTPS testing connection to device {device.hostname}, failed.', device)
-                    logger.debug(f'SSH testing connection to device {device.hostname}, was success.', device)
+                    logger.debug(f'HTTPS testing connection to device {device.hostname}, failed.', device, device, task_id=self.request.id)
+                    logger.debug(f'SSH testing connection to device {device.hostname}, was success.', device, device, task_id=self.request.id)
 
                     # Update information about device status and task status:
                     device.https_status = False
@@ -67,7 +67,7 @@ def single_device_check(self, device_pk: int) -> bool:
                     device.save()
                 else:
                     # Log about HTTPS and SSH connection status:
-                    logger.debug(f'HTTPS and SSH testing connection to device {device.hostname}, failed.', device)
+                    logger.debug(f'HTTPS and SSH testing connection to device {device.hostname}, failed.', device, device, task_id=self.request.id)
 
                     # Update information about device status and task status:
                     device.https_status = False
@@ -78,7 +78,7 @@ def single_device_check(self, device_pk: int) -> bool:
         else:  # If device is not avaliable log error:
 
             # Log 404 device error:
-            logger.debug(f'Device with ID {device_pk}, is not avaliable (Error 404).', device)
+            logger.debug(f'Device with ID {device_pk}, is not avaliable (Error 404).', device, device, task_id=self.request.id)
 
     else: # If device variable is not a intiger, raise type error:
         raise TypeError('Device PK variable can only be a intiger.')

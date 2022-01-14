@@ -19,7 +19,7 @@ class Logger():
     def __init__(self, application: str = 'NoName') -> None:
         self.application = application
 
-    def debug(self, message: str, model: object = None, connection: bool = False) -> Tuple:
+    def debug(self, message: str, model: object = None, system_message: bool = False, task_id: str = None) -> Tuple:
         """
             Create a new log based on the following data:
 
@@ -29,28 +29,12 @@ class Logger():
                     Logging message string value. 
                 model: string
                     Module or function name.
-                connection: boolean
-                    True if related witch connection log.
+                system_message: boolean
+                    True if related witch system message log.
         """
-        return self.__log(DEBUG, message, model, connection)
+        return self.__log(DEBUG, message, model, system_message, task_id)
 
-    def info(self, message: str, model: object = None, connection: bool = False) -> Tuple:
-        """
-            Create a new log based on the following data:
-
-                Method attributes:
-                -----------------
-                message: string
-                    Logging message string value. 
-                module: string
-                    Module or function name.
-                connection: boolean
-                    True if related witch connection log.
-        """
-        return self.__log(INFO, message, model, connection)
-
-
-    def warning(self, message: str, model: object = None, connection: bool = False) -> Tuple:
+    def info(self, message: str, model: object = None, system_message: bool = False, task_id: str = None) -> Tuple:
         """
             Create a new log based on the following data:
 
@@ -60,28 +44,13 @@ class Logger():
                     Logging message string value. 
                 module: string
                     Module or function name.
-                connection: boolean
-                    True if related witch connection log.
+                system_message: boolean
+                    True if related witch system message log.
         """
-        return self.__log(WARNING, message, model, connection)
+        return self.__log(INFO, message, model, system_message, task_id)
 
 
-    def error(self, message: str, model: object = None, connection: bool = False) -> Tuple:
-        """
-            Create a new log based on the following data:
-
-                Method attributes:
-                -----------------
-                message: string
-                    Logging message string value. 
-                module: string
-                    Module or function name.
-                connection: boolean
-                    True if related witch connection log.
-        """
-        return self.__log(ERROR, message, model, connection)
-
-    def critical(self, message: str, model: object = None, connection: bool = False) -> Tuple:
+    def warning(self, message: str, model: object = None, system_message: bool = False, task_id: str = None) -> Tuple:
         """
             Create a new log based on the following data:
 
@@ -91,12 +60,43 @@ class Logger():
                     Logging message string value. 
                 module: string
                     Module or function name.
-                connection: boolean
-                    True if related witch connection log.
+                system_message: boolean
+                    True if related witch system message log.
         """
-        return self.__log(CRITICAL, message, model, connection)
+        return self.__log(WARNING, message, model, system_message, task_id)
 
-    def __log(self, severity, message: str, model: object, connection: bool) -> Tuple:
+
+    def error(self, message: str, model: object = None, system_message: bool = False, task_id: str = None) -> Tuple:
+        """
+            Create a new log based on the following data:
+
+                Method attributes:
+                -----------------
+                message: string
+                    Logging message string value. 
+                module: string
+                    Module or function name.
+                system_message: boolean
+                    True if related witch system message log.
+        """
+        return self.__log(ERROR, message, model, system_message, task_id)
+
+    def critical(self, message: str, model: object = None, system_message: bool = False, task_id: str = None) -> Tuple:
+        """
+            Create a new log based on the following data:
+
+                Method attributes:
+                -----------------
+                message: string
+                    Logging message string value. 
+                module: string
+                    Module or function name.
+                system_message: boolean
+                    True if related witch system message log.
+        """
+        return self.__log(CRITICAL, message, model, system_message, task_id)
+
+    def __log(self, severity, message: str, model: object, system_message: bool, task_id: str) -> Tuple:
         """ Create new log in Database """
 
         # Collect log data:
@@ -104,7 +104,8 @@ class Logger():
             'application': self.application,
             'severity': severity,
             'message': str(message),
-            'connection': connection,
+            'system_message': system_message,
+            'task_id': task_id,
         }
 
         # Check if Model is object:

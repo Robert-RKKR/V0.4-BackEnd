@@ -2,12 +2,12 @@
 
 {% for row in log %}
     {% if row.severity == 4 %}
-        <li style="color:red;">{{ row.id }} --- {{ row.timestamp }} --- {{ row.message }}</li>
+        <li style="color:red;">{{ row.id }} --- {{ row.timestamp }} --- {{ row.task_id }} --- {{ row.message }}</li>
     {% elif row.severity == 3 %}
-        <li style="color:orange;">{{ row.id }} --- {{ row.timestamp }} --- {{ row.message }}</li>
+        <li style="color:orange;">{{ row.id }} --- {{ row.timestamp }} --- {{ row.task_id }} --- {{ row.message }}</li>
     {% elif row.severity == 2 %}
-        <li style="color:blue;">{{ row.id }} --- {{ row.timestamp }} --- {{ row.message }}</li>
+        <li style="color:blue;">{{ row.id }} --- {{ row.timestamp }} --- {{ row.task_id }} --- {{ row.message }}</li>
     {% elif row.severity == 1 %}
-        <li style="color:green;">{{ row.id }} --- {{ row.timestamp }} --- {{ row.message }}</li>
+        <li style="color:green;">{{ row.id }} --- {{ row.timestamp }} --- {{ row.task_id }} --- {{ row.message }}</li>
     {% endif %}
 {% endfor %}

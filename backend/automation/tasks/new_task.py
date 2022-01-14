@@ -1,4 +1,5 @@
 from celery import shared_task
+from autocli.celery import app
 from inventory.models.device_model import Device
 from automation.connection.netcon import NetCon
 
