@@ -1,8 +1,15 @@
 # Django Import:
-from django.db import connection, models
+from django.db import models
 
 # Application Import:
-from inventory.models import *
+from inventory.models import Credential
+from inventory.models import Device
+from inventory.models import Color
+from inventory.models import Group
+
+# Base Model Import:
+from main.basemodel import BaseMainModel
+from main.basemodel import BaseSubModel
 
 # Loggers models:
 class LoggerData(models.Model):

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'inventory.apps.InventoryConfig',
     'logger.apps.LoggerConfig',
     'administration.apps.AdministrationConfig',
+    'automation.apps.AutomationConfig',
 ]
 
 MIDDLEWARE = [
@@ -100,11 +101,11 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'autocli2',
+        'NAME': 'autocli11',
         'USER': 'postgres',
         'PASSWORD': 'password',
         'HOST': '127.0.0.1',
-        'PORT': 5009,
+        'PORT': 5011,
     }
 }
 

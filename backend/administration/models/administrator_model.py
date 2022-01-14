@@ -15,24 +15,17 @@ from ..validators import (
 from .administrator_manager_model import AdministratorManager
 
 # Base Model Import:
-from main.basemodel import BaseAutoCliModel
+from main.basemodel import BaseModel
 
 
-class Administrator(BaseAutoCliModel, AbstractBaseUser, PermissionsMixin):
+class Administrator(BaseModel, AbstractBaseUser, PermissionsMixin):
 
     # Validators:
     username_validator = UsernameValueValidator()
     password_validator = PasswordValueValidator()
 
     # Creation data values:
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
     last_login = models.DateTimeField(blank=True, null=True)
-
-    # Status values:
-    root = models.BooleanField(default=False)
-    deleted = models.BooleanField(default=False)
-    active = models.BooleanField(default=True)
 
     # Django related:
     staff = models.BooleanField(default=False)

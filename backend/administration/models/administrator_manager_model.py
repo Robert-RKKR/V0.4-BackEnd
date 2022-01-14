@@ -58,3 +58,7 @@ class AdministratorManager(BaseUserManager):
             is_superuser=True,
             extra_fields=extra_fields,
         )
+
+    class Meta:
+        default_permissions = ['read', 'read_write']
+        permissions = []
