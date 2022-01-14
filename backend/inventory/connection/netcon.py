@@ -19,7 +19,7 @@ from logger.logger import Logger
 class NetCon:
 
     # Logger class initiation:
-    logger = Logger('NetCon')
+    logger = Logger('SSH connection')
 
     def __init__(self, device: Device) -> None:
         """
@@ -48,17 +48,7 @@ class NetCon:
 
         # Check if device is Device object:
         if isinstance(device, Device):
-            # Change device type name to netmiko name:
-            if self.device.device_type == 0:
-                self.device_type = 'autodetect'
-            elif self.device.device_type == 1:
-                self.device_type = 'cisco_ios'
-            elif self.device.device_type == 2:
-                self.device_type = 'cisco_xr'
-            elif self.device.device_type == 3:
-                self.device_type = 'cisco_xe'
-            elif self.device.device_type == 4:
-                self.device_type = 'cisco_nxos'
+            self.device_type = self.device.get_device_type_display
         else:
             self.status = False # Change connection status to False.
             raise TypeError('Provided device is not instance of Device class')
@@ -81,7 +71,7 @@ class NetCon:
                 NetCon.logger.debug('SSH connection has been started.', self.device, True)
 
                 # Check if device type is not a autodetect type:
-                if self.device.device_type != 0:
+                if self.device_type != 'autodetect':
                     # Connect to device:
                     self.__ssh_connect()
                 else:
@@ -104,6 +94,8 @@ class NetCon:
                         self.device.device_type = 3
                     elif device_type == 'cisco_nxos':
                         self.device.device_type = 4
+                    elif device_type == 'cisco_asa':
+                        self.device.device_type = 5
                     else:
                         self.device.device_type = 0
                     

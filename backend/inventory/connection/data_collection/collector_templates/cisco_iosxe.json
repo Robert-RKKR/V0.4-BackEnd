@@ -1,6 +1,17 @@
 {
-    "name": "cisco_xe",
+    "status": true,
+    "name": "cisco_iosxe",
     "commands": [
+        {
+            "command_name": "show interfaces description",
+            "command_template_name": "cisco_ios_show_interfaces_description.textfsm",
+            "model": "DeviceInterface"
+        },
+        {
+            "command_name": "show interfaces switchport",
+            "command_template_name": "cisco_ios_show_interfaces_switchport.textfsm",
+            "model": "DeviceInterface"
+        },
         {
             "command_name": "show interfaces",
             "command_template_name": "cisco_ios_show_interfaces.textfsm",

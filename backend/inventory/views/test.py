@@ -14,7 +14,7 @@ def test(request, pk):
         'output': 'RKKR'
     }
 
-    data['output'] = single_device_ssh_collect(pk)
+    ### data['output'] = single_device_ssh_collect(pk)
 
     # test_object_values = Device._meta.get_fields()
     
@@ -25,16 +25,20 @@ def test(request, pk):
     # data['output'] = single_device_check.delay(1)
     # print(single_device_check.name)
 
-    
 
     device = Device.objects.get(pk=pk)
     
+    import json
+    json_example = open("inventory/connection/data_collection/collector_templates/cisco_ios.json").read()
+    json_python = json.loads(json_example)
+    data['output'] = json_python['name']
+
     # logger = Logger()
     # id_task = data['output']
     # logger.debug(f'New task nr: {id_task}', device)
 
-    log = LoggerData.objects.filter(device=device).order_by('-pk')
-    data['log'] = log
+    logs = LoggerData.objects.filter(device=device).order_by('-pk')
+    data['log'] = logs
 
     return render(request, 'inventory/test.html', data)
 

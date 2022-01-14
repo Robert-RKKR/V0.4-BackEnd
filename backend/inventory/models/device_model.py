@@ -35,12 +35,12 @@ class Device(BaseAutoCliModel, models.Model):
 
     # Static values:
     DEVICE_TYPE = (
-        (0, 'Autodetect'),
-        (1, 'Cisco IOS'),
-        (2, 'Cisco XR'),
-        (3, 'Cisco XE'),
-        (4, 'Cisco NXOS'),
-        (6, 'Cisco ASA'),
+        (0, 'autodetect'),
+        (1, 'cisco_ios'),
+        (2, 'cisco_xr'),
+        (3, 'cisco_xe'),
+        (4, 'cisco_nxos'),
+        (6, 'cisco_asa'),
     )
 
     # Creation data values:
