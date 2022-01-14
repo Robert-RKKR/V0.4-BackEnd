@@ -53,6 +53,8 @@ class BaseModel(models.Model):
 
 class BaseMainModel(BaseModel):
 
+    model_name = BaseModel.__class__.__name__
+
     # Validators:
     name_validator = NameValueValidator()
     description_validator = DescriptionValueValidator()
@@ -66,12 +68,12 @@ class BaseMainModel(BaseModel):
         error_messages={
             'null': 'Name field is mandatory.',
             'blank': 'Name field is mandatory.',
-            'unique': 'Device with this name already exists.',
+            'unique': f'{model_name} with this name already exists.',
             'invalid': 'Enter the correct name value. It must contain 4 to 32 digits, letters and special characters -, _ or spaces.',
         },
     )
     description = models.CharField(
-        max_length=256, default=f'{BaseModel.__class__.__name__} description.',
+        max_length=256, default=f'{model_name} description.',
         validators=[description_validator],
         error_messages={
             'invalid': 'Enter the correct description value. It must contain 8 to 256 digits, letters and special characters -, _, . or spaces.',
