@@ -8,7 +8,7 @@ from automation.connection.netcon import NetCon
 def new_task(self, pk):
     device = Device.objects.get(pk=pk)
 
-    connection = NetCon(device)
+    connection = NetCon(device, self.request.id)
     output = connection.send_command('show version')
     
     return output

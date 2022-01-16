@@ -37,7 +37,7 @@ def single_device_check(self, device_pk: int) -> bool:
         if isinstance(device, Device):
             
             # Connect to device using HTTPS request:
-            https_connection = RestCon(device)
+            https_connection = RestCon(device, self.request.id)
             https_connection.get('restconf')
 
             # Check HTTPS request output and change device status:
@@ -52,7 +52,7 @@ def single_device_check(self, device_pk: int) -> bool:
                 device.save()
             else:
                 # Connect to device using SSH connection:
-                ssh_connection = NetCon(device)
+                ssh_connection = NetCon(device, self.request.id)
             
                 # Check SSH request output and change device status:
                 if ssh_connection.status is True:

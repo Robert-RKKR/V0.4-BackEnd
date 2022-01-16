@@ -9,19 +9,8 @@ class LoggerDataSerializer(serializers.ModelSerializer):
     class Meta:
         app_label = 'api'
         model = LoggerData
-        depth = 1
-        fields = [
-            'id',
-            'application',
-            'timestamp',
-            'severity',
-            'message',
-            'connection',
-            'device',
-            'color',
-            'credential',
-            'group',
-        ]
+        depth = 0
+        fields = '__all__'
 
 
 class LoggerDataSerializerUpdateCreate(serializers.ModelSerializer):
@@ -29,15 +18,4 @@ class LoggerDataSerializerUpdateCreate(serializers.ModelSerializer):
     class Meta:
         app_label = 'api'
         model = LoggerData
-        fields = [
-            'id',
-            'application',
-            'timestamp',
-            'severity',
-            'message',
-            'connection',
-            'device',
-            'color',
-            'credential',
-            'group',
-        ]
+        fields = '__all__'
