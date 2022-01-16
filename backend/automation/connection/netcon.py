@@ -57,7 +57,7 @@ class NetCon:
         # Device unsupported declaration:
         self.unsupported = None
 
-        # Check if provided device variable is Device object:
+        # Check if provided device variable is valid Device object:
         if isinstance(device, Device):
             # Collect information about device type:
             self.device_type = self.device.device_type

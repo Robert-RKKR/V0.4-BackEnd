@@ -11,7 +11,6 @@ from ..validators import ColorValueValidator
 
 # Base Model Import:
 from main.basemodel import BaseMainModel
-from main.basemodel import BaseSubModel
 
 # Model code:
 class Color(BaseMainModel):
@@ -38,49 +37,6 @@ class Color(BaseMainModel):
     )
 
     # Relationships with other models:
-    devices = models.ManyToManyField(Device, through='ColorDeviceRelation', blank=True)
-    groups = models.ManyToManyField(Group, through='ColorGroupRelation', blank=True)
-    credentials = models.ManyToManyField(Credential, through='ColorCredentialRelation', blank=True)
-
-
-# Relations models:
-class ColorDeviceRelation(BaseSubModel):
-
-    # Relations values:
-    device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    color = models.ForeignKey(Color, on_delete=models.CASCADE)
-
-    # Model representation:
-    def __str__(self) -> str:
-        return f"ColorDeviceRelation({self.device}/{self.color})"
-
-    class Meta:
-        unique_together = [['device', 'color']]
-
-
-class ColorGroupRelation(BaseSubModel):
-
-    # Relations values:
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    color = models.ForeignKey(Color, on_delete=models.CASCADE)
-
-    # Model representation:
-    def __str__(self) -> str:
-        return f"ColorGroupRelation({self.group}/{self.color})"
-
-    class Meta:
-        unique_together = [['group', 'color']]
-
-
-class ColorCredentialRelation(BaseSubModel):
-
-    # Relations values:
-    credential = models.ForeignKey(Credential, on_delete=models.CASCADE)
-    color = models.ForeignKey(Color, on_delete=models.CASCADE)
-
-    # Model representation:
-    def __str__(self) -> str:
-        return f"ColorCredentialRelation({self.credential}/{self.color})"
-
-    class Meta:
-        unique_together = [['credential', 'color']]
+    devices = models.ManyToManyField(Device, blank=True)
+    groups = models.ManyToManyField(Group, blank=True)
+    credentials = models.ManyToManyField(Credential, blank=True)

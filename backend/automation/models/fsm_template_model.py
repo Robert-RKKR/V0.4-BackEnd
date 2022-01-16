@@ -5,16 +5,18 @@ from django.db import models
 from main.basemodel import BaseMainModel
 
 # Models Import:
-from .device_type_template_model import DeviceTypeTemplate
+from inventory.models.device_model import DeviceType
+
 
 class FsmTemplate(BaseMainModel):
     """ Xxx """
 
     # Corelation witch device type template:
-    device_type = models.ForeignKey(DeviceTypeTemplate, on_delete=models.PROTECT)
+    device_type = models.ForeignKey(DeviceType, on_delete=models.PROTECT, null=True, blank=True)
 
     # Main model values:
-    command = models.CharField(max_length=128)
+    device_template = models.BooleanField(default=False)
+    command = models.CharField(max_length=128, null=True, blank=True)
     sfm_expression = models.TextField()
 
     # Connections with other device models:

@@ -2,7 +2,6 @@
 from rest_framework import serializers
 
 # Application Import:
-from ..models.group_model import GroupDeviceRelation
 from ..models.group_model import Group
 
 # API Variable Import:
@@ -22,19 +21,4 @@ class GroupSerializerUpdateCreate(serializers.ModelSerializer):
     
     class Meta:
         model = Group
-        fields = '__all__'
-
-
-# Group Device Relation Serializer:
-class GroupDeviceRelationSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = GroupDeviceRelation
-        fields = '__all__'
-
-
-class GroupDeviceRelationSerializerUpdateCreate(serializers.ModelSerializer):
-    
-    class Meta:
-        model = GroupDeviceRelation
         fields = '__all__'

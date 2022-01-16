@@ -1,5 +1,7 @@
 <p>{{ output }}</p>
 
+<p>{{ policy }}</p>
+
 {% for row in log %}
     {% if row.severity == 4 %}
         <li style="color:red;">{{ row.id }} --- {{ row.timestamp }} --- {{ row.task_id }} --- {{ row.message }}</li>

@@ -11,7 +11,4 @@ from inventory.models.device_model import DeviceType
 class TaskManager(BaseMainModel):
     """ Xxx """
 
-    # Corelation witch device type model:
-    device_type = models.OneToOneField(DeviceType, on_delete=models.PROTECT)
-
-    # Main model values:
+    pass
