@@ -283,16 +283,19 @@ class GenericObjectsView(APIView, TenResultsPagination):
                 filter_data = filter_response
         
         # Check if filters are provided, if no return all objects:
-        if filter_data is None:
-            if isinstance(self.orders, list):
-                return self.queryset.objects.all().order_by(*self.orders)
+        try:
+            if filter_data is None:
+                if isinstance(self.orders, list):
+                    return self.queryset.objects.all().order_by(*self.orders)
+                else:
+                    return self.queryset.objects.all()
             else:
-                return self.queryset.objects.all()
-        else:
-            if isinstance(self.orders, list):
-                return self.queryset.objects.filter(**filter_data).order_by(*self.orders)
-            else:
-                return self.queryset.objects.filter(**filter_data)
+                if isinstance(self.orders, list):
+                    return self.queryset.objects.filter(**filter_data).order_by(*self.orders)
+                else:
+                    return self.queryset.objects.filter(**filter_data)
+        except:
+            return {'detail': {'error': 'Unknown error 5674.'}}
 
 
 class GenericObjectView(APIView):

@@ -13,9 +13,9 @@ from inventory.models.group_model import Group
 
 
 TASKS = (
-    (0, ('Devices configuration')),
-    (1, ('Single device check')),
-    (2, ('Single device collect')),
+    (0, ('Device configuration')),
+    (11, ('Device check')),
+    (12, ('Device collect')),
 )
 
 

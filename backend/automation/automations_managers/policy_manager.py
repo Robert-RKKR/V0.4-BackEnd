@@ -1,4 +1,5 @@
 # Application Import:
+from automation.models.policy_manager_model import PolicyManager
 from automation.models.policy_model import Policy
 
 
@@ -40,6 +41,15 @@ class PolicyManager:
         # Policy related templates declaration:
         self.all_templates = []
         self._collect_templates()
+
+        # Policy manager object definition:
+        self.policy_manager_object = None
+
+    def run_policy(self):
+        """ Run policy. """
+
+        # Create new policy manager object:
+        self.policy_manager_object = PolicyManager(self)
 
     def _collect_groups(self):
         """ Collect all groups that are related with provided policy. """
