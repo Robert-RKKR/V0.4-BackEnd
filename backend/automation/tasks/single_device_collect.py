@@ -13,7 +13,7 @@ from inventory.models.device_model import Device
 from logger.logger import Logger
 
 # Data collection Import:
-from inventory.connection.data_collection.data_ssh_collection import DataSSHCollectionManager
+from automation.connection.collectors.ssh_data_collector import SshDataCollector
 
 # Logger class initiation:
 ssh_logger = Logger('Single device SSH collect')
@@ -37,15 +37,15 @@ def single_device_ssh_collect(self, device_pk: int) -> bool:
         if isinstance(device, Device):
 
             # Log starting of device data collection:
-            ssh_logger.info(f'Starting of device {device.name} ({device.hostname}), data collection', device)
+            ssh_logger.info(f'Starting of device {device.name} ({device.hostname}), data collection', device, task_id=self.request.id)
 
             # Collect data from device using Data Collection Manager class:
-            data_collection = DataSSHCollectionManager(device)
+            data_collection = SshDataCollector(device, self.request.id)
             collect_output = data_collection.collect()
 
             # Check data collection status:
             if data_collection.status is False:
-                ssh_logger.error(f'SSH data collection process failed', device)
+                ssh_logger.error(f'SSH data collection process failed', device, task_id=self.request.id)
 
             # Return:
             return collect_output
@@ -53,7 +53,7 @@ def single_device_ssh_collect(self, device_pk: int) -> bool:
         else: # If device is not avaliable log error:
 
             # Log 404 device error:
-            ssh_logger.error(f'Device with ID {device_pk}, is not avaliable (Error 404).', device)
+            ssh_logger.error(f'Device with ID {device_pk}, is not avaliable (Error 404).', device, task_id=self.request.id)
 
     else: # If device variable is not a intiger, raise type error:
         raise TypeError('Device PK variable can only be a intiger.')
@@ -83,7 +83,7 @@ def single_device_https_collect(self, device_pk: int) -> bool:
         else: # If device is not avaliable log error:
 
             # Log 404 device error:
-            ssh_logger.error(f'Device with ID {device_pk}, is not avaliable (Error 404).', device)
+            ssh_logger.error(f'Device with ID {device_pk}, is not avaliable (Error 404).', device, task_id=self.request.id)
 
     else: # If device variable is not a intiger, raise type error:
         raise TypeError('Device PK variable can only be a intiger.')

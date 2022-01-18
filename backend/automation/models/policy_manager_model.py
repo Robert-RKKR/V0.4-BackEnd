@@ -8,6 +8,7 @@ from main.basemodel import BaseSubModel
 from automation.models.policy_model import Policy
 
 # Tasks Import:
+from automation.tasks.single_device_collect import single_device_ssh_collect
 from automation.tasks.single_device_check import single_device_check
 
 
@@ -42,12 +43,20 @@ class PolicyManager(BaseSubModel):
         self.all_templates = []
         self._collect_templates()
 
-        if self.policy.task == 11:
-            tasks_ids_list = []
-            for device in self.all_devices:
-                tasks_ids_list.append(str(single_device_check.delay(device.pk)))
+        # Tasks IDs list declaration:
+        tasks_ids = []
 
-            self.tasks_ids = tasks_ids_list
+        # Perform an action depending on the type of task:
+        if self.policy.task == 0:
+            pass
+        elif self.policy.task == 11:
+            for device in self.all_devices:
+                tasks_ids.append(str(single_device_check.delay(device.pk)))
+                self.tasks_ids = tasks_ids
+        elif self.policy.task == 12:
+            for device in self.all_devices:
+                tasks_ids.append(str(single_device_ssh_collect(device.pk)))
+                self.tasks_ids = tasks_ids
 
 
     def _collect_groups(self):
