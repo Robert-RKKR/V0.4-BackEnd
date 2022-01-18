@@ -157,7 +157,7 @@ class NetCon:
             else:
 
                 # Connect to device to check device type, using SSH protocol:
-                check_device_type = SSHDetect(**{
+                self.connection = SSHDetect(**{
                     'device_type': 'autodetect',
                     'host': self.device.hostname,
                     'username': self.username,
@@ -165,7 +165,7 @@ class NetCon:
                     'port': self.device.ssh_port,
                 })
                 # Collect information about device type:
-                return check_device_type.autodetect()
+                return self.connection.autodetect()
 
         # Handel exceptions:
         except AuthenticationException as error:

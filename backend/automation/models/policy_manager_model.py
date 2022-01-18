@@ -55,7 +55,7 @@ class PolicyManager(BaseSubModel):
                 self.tasks_ids = tasks_ids
         elif self.policy.task == 12:
             for device in self.all_devices:
-                tasks_ids.append(str(single_device_ssh_collect(device.pk)))
+                tasks_ids.append(str(single_device_ssh_collect.delay(device.pk)))
                 self.tasks_ids = tasks_ids
 
 
