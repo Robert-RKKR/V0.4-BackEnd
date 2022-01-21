@@ -1,6 +1,10 @@
 # Application Import:
-from automation.models.policy_manager_model import PolicyManager
+from automation.models.policy_manager_model import PolicyManager as Manager
 from automation.models.policy_model import Policy
+
+# Tasks Import:
+from automation.tasks.single_device_collect import single_device_ssh_collect
+from automation.tasks.single_device_check import single_device_check
 
 
 class PolicyManager:
@@ -42,14 +46,36 @@ class PolicyManager:
         self.all_templates = []
         self._collect_templates()
 
-        # Policy manager object definition:
-        self.policy_manager_object = None
+        # Create new Policy Manager object:
+        self.policy_manager_object = Manager(policy=self.policy)
+        self.policy_manager_object.save()
+
+        # Tasks IDs list declaration:
+        self.tasks_ids = self.policy_manager_object.tasks_ids
 
     def run_policy(self):
         """ Run policy. """
 
         # Create new policy manager object:
-        self.policy_manager_object = PolicyManager(self)
+        self.policy_manager_object = Manager(policy=self.policy)
+
+        # Tasks IDs list local declaration:
+        tasks_ids = []
+
+        # Perform an action depending on the type of task:
+        if self.policy.task == 0:
+            pass
+        elif self.policy.task == 11:
+            for device in self.all_devices:
+                tasks_ids.append(str(single_device_check.delay(device.pk)))
+                self.tasks_ids = tasks_ids
+        elif self.policy.task == 12:
+            for device in self.all_devices:
+                tasks_ids.append(str(single_device_ssh_collect.delay(device.pk)))
+                self.tasks_ids = tasks_ids
+
+        # save task id list in manager object:
+        self.policy_manager_object.save()
 
     def _collect_groups(self):
         """ Collect all groups that are related with provided policy. """

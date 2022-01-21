@@ -16,7 +16,6 @@ class PolicyManagerView(GenericObjectsView):
     queryset = PolicyManager
     serializer_all = PolicyManagerSerializer
     serializer_limited = PolicyManagerSerializerUpdateCreate
-    allowed_methods = ['get']
 
 
 class PolicyManagerIdView(GenericObjectView):

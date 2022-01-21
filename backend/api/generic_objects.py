@@ -7,10 +7,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 # Pagination Import:
-from api.pagination import TenResultsPagination
+from api.pagination import HundredResultsPagination
 
 
-class GenericObjectsView(APIView, TenResultsPagination):
+class GenericObjectsView(APIView, HundredResultsPagination):
     """
         Generic Object View, is responsible for API View.
     """

@@ -2,12 +2,12 @@
 from django.shortcuts import render
 
 # Application Import:
+from automation.connection.automations_managers.policy_manager import PolicyManager
 from logger.models import LoggerData
 from inventory.models.device_model import Device
 from automation.tasks.single_device_check import single_device_check
 from automation.tasks.new_task import new_task
 from automation.models.policy_model import Policy
-from automation.models.policy_manager_model import PolicyManager
 
             
 
@@ -25,11 +25,8 @@ def test(request, pk):
     data['log'] = logs
 
     policy = Policy.objects.get(pk=5)
-    policy_manager = PolicyManager(policy=policy)
-    policy_manager.save()
-
-    data['policy'] = policy_manager.all_templates
-    data['output'] = device
+    policy_manager = PolicyManager(policy)
+    policy_manager.run_policy()
 
     return render(request, 'inventory/test.html', data)
 
