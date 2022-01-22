@@ -24,11 +24,11 @@ def test(request, pk):
     logs = LoggerData.objects.filter(device=device).order_by('-pk')
     data['log'] = logs
 
-    policy = Policy.objects.get(pk=5)
-    policy_manager = PolicyManager(policy)
-    policy_manager.run_policy()
+    # policy = Policy.objects.get(pk=5)
+    # policy_manager = PolicyManager(policy)
+    # policy_manager.run_policy()
 
-    return render(request, 'inventory/test.html', data)
+    return render(request, 'test.html', data)
 
 
 # Test

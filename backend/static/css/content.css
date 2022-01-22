@@ -1,0 +1,436 @@
+ /*   -------------------------   */
+/*   ----     CONTENT     ----   */
+
+
+    /*   -----   MESSAGE   -----   */
+    .message {
+        position: fixed;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px;
+        margin-left: var(--model_padding);
+    }
+
+    .message-ico {
+        width: 50px;
+        height: 50px;
+    }
+
+    .message-text {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .message-text span {
+        margin: 0px 40px 0px 20px;
+    }
+
+    .message-button  {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .message-close {
+        cursor: pointer;
+        width: 25px;
+        height: 25px;
+    }
+
+        
+        /*   -----   MESSAGE ERROR, CRITICAL   -----   */
+        .error {
+            background: var(--color_light_red);
+            border: var(--color_strong_red) solid 1px;
+            color: var(--color_strong_red);
+        }
+
+        .error .message-close {
+            fill: var(--color_strong_red);
+        }
+
+        /*   -----   MESSAGE INFORM   -----   */
+        .inform {
+            background: var(--color_light_green);
+            border: var(--color_strong_green) solid 1px;
+            color: var(--color_strong_green);
+        }
+
+        .inform .message-close {
+            fill: var(--color_strong_green);
+        }
+
+        /*   -----   MESSAGE INFORM   -----   */
+        .debug {
+            background: var(--color_light_blue);
+            border: var(--color_strong_blue) solid 1px;
+            color: var(--color_strong_blue);
+        }
+
+        .debug .message-close {
+            fill: var(--color_strong_blue);
+        }
+
+
+    /*   -----   MODEL TOOLS   -----   */
+    #model-panel {
+        justify-content: space-between;
+    }
+
+    #model-panel .action-group {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+
+    /*   -----   MODEL SEARCH   -----   */
+    #model-search input {
+        width: 100%;
+    }
+
+    #model-search button {
+        padding: var(--box_padding_full);
+        padding-left: 20px;
+        padding-right: 20px;
+        border: none;
+        background: #efefef;
+    }
+
+    #model-search button:hover {
+        background: var(--color_strong_red);
+    }
+
+    #model-search div {
+        padding: var(--box_padding_full);
+        padding-left: 20px;
+        padding-right: 20px;
+        border: none;
+        background: #efefef;
+    }
+
+    #model-search div:hover {
+        background: var(--color_strong_red);
+    }
+
+
+        /*   -----   MODEL SEARCH FILTER   -----   */
+        #model-filter > div {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            padding: var(--box_padding_full_and_half);
+        }
+
+        #model-filter > div > input, label, select {
+            margin: var(--box_padding_half);
+        }
+        
+        #model-filter input {
+            background: var(--color_page_background);
+            border: none;
+            padding: var(--box_padding_half);
+        }
+
+
+     /*   ---------------------------   */
+    /*   ----     MODEL GRID     ----   */
+    #model-grid {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+
+        /*   -----   ITEM   -----   */
+        .model-item {
+            padding-left: var(--box_padding_half);
+            padding-right: var(--box_padding_half);
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .model-item img {
+            height: 65px;
+            width: 65px;
+        }
+
+        .model-subitem {
+            padding: var(--box_padding_full_and_half);
+            flex-direction: column;
+        }
+
+
+            /*   -----   MODEL ITEM STATUS   -----   */
+            .model-item-status {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+
+                /*   -----   ITEM BALL   -----   */
+                .ball-box {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .ball {
+                    border-radius: 50%;
+                    width: var(--box_padding_full);
+                    height: var(--box_padding_full);
+                    margin: 0px 10px 15px 0px;
+                }
+            
+                .ball-active {
+                    background: var(--color_strong_green);
+                }
+            
+                .ball-inactive {
+                    background: var(--color_strong_red);
+                }
+
+
+                /*   -----   ITEM CHECK   -----   */
+                .check-item  {
+                    height: 15px;
+                    width: 15px;
+                }
+
+
+            /*   -----   ITEM HEADER   -----   */
+            .model-item-header {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: var(--box_padding_full);
+            }
+
+            .model-item-header > div {
+                margin-left: var(--box_padding_full);
+            }
+
+            .model-item-header a {
+                font-size: 1.2em;
+                color: var(--color_strong_blue);
+            }
+
+            /*   -----   ITEM BODY   -----   */
+            .model-item-body {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                border-top: var(--color_light_gray) solid 1px;
+                padding-top: var(--box_padding_full);
+            }
+
+            .model-item-body table {
+                width: 100%;
+            }
+
+            .model-item-body table th, td {
+                padding: 3px;
+            }
+
+
+
+
+
+    /*   ---------------------------   */
+    /*   ----     OBJECT GRID     ----   */
+    #object-grid {
+        column-count: 1;
+        column-gap: 0;
+    }
+
+    .object-item {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .object-subitem {
+        display: flex;
+        flex-direction: column;
+        margin: var(--box_padding_half);
+    }
+
+
+        /*   -----   OBJECT GRID HEADER   -----   */
+        .object-item-header {
+            background: var(--color_light_gray);
+            padding: var(--box_padding_half);
+        }
+
+
+        /*   -----   OBJECT GRID BODY   -----   */
+        .object-item-body {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .object-item-body th, td {
+            font-size: 0.9em;
+            padding: 5px;
+        }
+
+
+
+
+    /*   ---------------------------   */
+    /*   ----     FORM GRID     ----   */
+    #form-grid {
+        flex-direction: column;
+        margin-left: var(--box_padding_half);
+        margin-right: var(--box_padding_half);
+    }
+
+
+        /*   -----   FORM HEAD   -----   */
+        #form-grid .form-header {
+            padding: var(--box_padding_full);
+            background: var(--color_light_gray);
+            color: var(--color_font_white);
+        }
+
+
+        /*   -----   FORM BODY   -----   */
+        #form-grid .form-body {
+            padding: var(--box_padding_full_and_half);
+        }
+
+        #form-grid .form-body form {
+            display: flex;
+            flex-direction: column;
+        }
+    
+        #form-grid .form-body form input, select {
+            background: var(--color_page_background);
+            padding: var(--box_padding_half);
+            margin: var(--box_padding_half) 0px;
+            border: 0px;
+        }
+    
+        #form-grid .form-body form label {
+            padding: var(--box_padding_half) 0px;
+            margin: var(--box_padding_half) 0px;
+        }
+
+
+            /*   -----   FORM BODY ERRORS   -----   */
+            #form-grid .errorlist {
+                background: var(--color_strong_red);
+                padding: var(--box_padding_full);
+                color: var(--color_font_white);
+            }
+
+
+            /*   -----   FORM BODY HELP TEXT   -----   */
+            #form-grid .helptext {
+                display: none;
+            }
+
+            #form-grid br {
+                display: none;
+            }
+
+
+            /*   -----   FORM BODY SUBMIT BUTTON   -----   */
+            #form-grid .form-button {
+                padding: var(--box_padding_full);
+                background: var(--color_light_gray);
+                margin-top: var(--box_padding_full_and_half);
+                border: none;
+                width: 100%;
+            }
+
+
+
+    /*   -----------------------   */
+	/*   ----     TABLE     ----   */
+	.table {
+		margin: 0px var(--model_padding) 20px var(--model_padding);
+		box-sizing: border-box;
+        margin-left: var(--box_padding_half);
+        margin-right: var(--box_padding_half);
+	}
+
+	.table table {
+		width: 100%;
+		border-color: #dee2e6;
+    	border-collapse: collapse;
+		background: var(--color_background_grid);
+	}
+
+	.table table td, th {
+		text-align: center;
+		padding: 10px;
+	}
+
+	.table table th {
+		font-weight: bold;
+	}
+
+    .table table th a {
+		text-decoration: none;
+        color: var(--color_font_gray_dark);
+	}
+
+		/*   ----     TABLE BLUE     ----   */
+		.table-blue thead {
+			background: var(--color_strong_blue);
+		}
+		
+		.table-blue tbody tr:nth-child(even) {
+			background: var(--color_light_blue);
+		}
+	
+	
+		/*   ----     TABLE GREEN     ----   */
+		.table-green thead {
+			background: var(--color_strong_green);
+		}
+		
+		.table-green tbody tr:nth-child(even) {
+			background: var(--color_light_green);
+		}
+		
+		
+		/*   ----     TABLE RED     ----   */
+		.table-red thead {
+			background: var(--color_strong_red);
+		}
+		
+		.table-red tbody tr:nth-child(even) {
+			background: var(--color_light_red);
+		}
+		
+		
+		/*   ----     TABLE YELLOW     ----   */
+		.table-yellow thead {
+			background: var(--color_strong_yellow);
+		}
+		
+		.table-yellow tbody tr:nth-child(even) {
+			background: var(--color_light_yellow);
+		}
+		
+		
+		/*   ----     TABLE GRAY     ----   */
+		.table-gray thead {
+			background: var(--color_strong_gray);
+		}
+		
+		.table-gray tbody tr:nth-child(even) {
+			background: var(--color_light_gray);
+		}
+
+            

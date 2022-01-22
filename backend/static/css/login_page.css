@@ -1,0 +1,59 @@
+ /*   -----------------------   */
+/*   ----  LOGIN PAGE   ----   */
+.center-page {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background: var(--color_page_background);
+    width: 100vw;
+    height: 100vh;
+}
+
+#login-page .login-form {
+    display: flex;
+    flex-direction: column;
+    background: var(--color_box_background);
+}
+
+#login-page .login-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color_strong_blue);
+    padding: 10px 20px;
+}
+
+#login-page .login-top svg {
+    fill: var(--color_box_background);
+    height: 30px;
+    width: 30px;
+}
+
+#login-page .login-top span {
+    color: var(--color_box_background);
+}
+
+#login-page .login-bottom  {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+}
+
+#login-page .login-bottom input {
+    width: 150px;
+    background: var(--color_page_background);
+    margin: 0px 20px 10px 20px;
+    padding: 10px 30px;
+    border: none;
+}
+
+#login-page .login-bottom button {
+    width: 150px;
+    background: var(--color_strong_green);
+    margin: 10px 20px 0px 20px;
+    cursor: pointer;
+    padding: 10px 30px;
+    border: none;
+}
