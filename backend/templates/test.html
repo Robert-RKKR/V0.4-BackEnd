@@ -17,5 +17,33 @@
             <li style="color:green;">{{ row.id }} --- {{ row.timestamp }} --- {{ row.task_id }} --- {{ row.message }}</li>
         {% endif %}
     {% endfor %}
+
+    <!-- Table -->
+    <div class="table grid-box">
+
+        <table class="shadow table-hover table-blue">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Timestamp</th>
+                    <th scope="col">Task ID</th>
+                    <th scope="col">Message</th>
+                    <th scope="col">Device</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                    <tr>
+                        <th>{{ log.id }}</th>
+                        <td>{{ log.timestamp }}</td>
+                        <td>{{ log.task_id }}</td>
+                        <td>{{ log.message }}</td>
+                        <td>{{ log.device }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
     
 {% endblock %}

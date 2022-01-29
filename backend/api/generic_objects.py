@@ -10,6 +10,14 @@ from rest_framework.views import APIView
 from api.pagination import HundredResultsPagination
 
 
+class GenericResponse(APIView):
+    """
+        Generic response, used to return python dictionary
+    """
+
+    pass
+
+
 class GenericObjectsView(APIView, HundredResultsPagination):
     """
         Generic Object View, is responsible for API View.

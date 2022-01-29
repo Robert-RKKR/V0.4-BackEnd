@@ -2,6 +2,10 @@
 from automation.models.policy_manager_model import PolicyManager as Manager
 from automation.models.policy_model import Policy
 
+# Python Import:
+from jinja2 import Environment, BaseLoader, PackageLoader, meta
+import jinja2schema
+
 # Tasks Import:
 from automation.tasks.single_device_collect import single_device_ssh_collect
 from automation.tasks.single_device_check import single_device_check
@@ -64,7 +68,7 @@ class PolicyManager:
 
         # Perform an action depending on the type of task:
         if self.policy.task == 0:
-            pass
+            self._device_configuration()
         elif self.policy.task == 11:
             for device in self.all_devices:
                 tasks_ids.append(str(single_device_check.delay(device.pk)))
@@ -76,6 +80,20 @@ class PolicyManager:
 
         # save task id list in manager object:
         self.policy_manager_object.save()
+
+    def _device_configuration(self):
+
+        for template in self.all_templates:
+            environment = Environment(loader=BaseLoader).from_string(template.sfm_expression)
+            rendered = environment.render(interfaces=['gigabitethernet 1', 'gigabitethernet 2'])
+            print('--------(template)>', template.sfm_expression)
+            print('--------(rendered)>', rendered)
+            variables = jinja2schema.infer(template.sfm_expression)
+            print('--------(variables)>', variables.keys())
+            for row in variables.keys():
+                print('--------(variables)>', type(variables[row]))
+                if isinstance(row, jinja2schema.model.List):
+                    print('--------(list)>', row)
 
     def _collect_groups(self):
         """ Collect all groups that are related with provided policy. """

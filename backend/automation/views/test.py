@@ -21,12 +21,12 @@ def test(request, pk):
     device = Device.objects.get(pk=pk)
     # data['output'] = single_device_check.delay(device.pk)
     # data['output'] = new_task.delay(device.pk)
-    logs = LoggerData.objects.filter(device=device).order_by('-pk')
-    data['log'] = logs
+    # logs = LoggerData.objects.filter(device=device).order_by('-pk')
+    # data['logs'] = logs
 
-    # policy = Policy.objects.get(pk=5)
-    # policy_manager = PolicyManager(policy)
-    # policy_manager.run_policy()
+    policy = Policy.objects.get(pk=6)
+    policy_manager = PolicyManager(policy)
+    policy_manager.run_policy()
 
     return render(request, 'test.html', data)
 

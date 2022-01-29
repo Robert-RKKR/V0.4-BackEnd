@@ -24,21 +24,20 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    # Swagger API view:
-    # path('^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+   # Swagger API view:
+   # path('^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+   path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+   path('redoc', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
-    # Admin panel URL:
-    path('admin/', admin.site.urls),
+   # Admin panel URL:
+   path('admin/', admin.site.urls),
 
-    # Token key generator URL:
-    path('api-token-auth', views.obtain_auth_token, name='api_key_generator'),
-
-    path('automation/', include('automation.urls')),
-
-    # Applications URL-s:
-    path('inventory/', include('inventory.urls')),
-    path('administration/', include('administration.urls')),
-    path('logger/', include('logger.urls')),
+   # Token key generator URL:
+   path('api-token-auth', views.obtain_auth_token, name='api_key_generator'),
+   # Applications URL-s:
+   path('automation/', include('automation.urls')),
+   path('dashboard/', include('dashboard.urls')),
+   path('inventory/', include('inventory.urls')),
+   path('administration/', include('administration.urls')),
+   path('logger/', include('logger.urls')),
 ]
