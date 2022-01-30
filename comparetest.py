@@ -9,9 +9,9 @@ test = {
     'compering': []
 }
 
-for diff in difflib.context_diff(textone, texttwo):
-    test['compering'].append(diff)
+# for diff in difflib.context_diff(textone, texttwo):
+#     print(diff)
 
-for row in test['compering']:
-    print(row)
-
+d = difflib.Differ()
+diff = d.compare(textone, texttwo)
+print('\n'.join(diff))
